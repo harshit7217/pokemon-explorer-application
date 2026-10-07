@@ -3,3 +3,29 @@
 * {
     font-family: serif;
 }
+
+.loader {
+  height: 80px;
+  aspect-ratio: 1;
+  padding: 10px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative;
+  -webkit-mask: conic-gradient(#000 0 0) content-box exclude, conic-gradient(#000 0 0);
+  mask: conic-gradient(#000 0 0) content-box exclude, conic-gradient(#000 0 0);
+  filter: blur(12px);
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(#0000 0 5%, #C02942, #0000 20% 50%);
+  animation: l2 1.5s linear infinite;
+}
+
+@keyframes l2 {
+  to {
+    rotate: 1turn;
+  }
+}
