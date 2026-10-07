@@ -3,30 +3,58 @@ import { useEffect, useState } from "react";
 const SearchPokemon = ({ onReturnHandle }) => {
   const [search, setSearch] = useState("");
   const [searchDetails, setSearchDetails] = useState([]);
+  const [pokemonList, setPokemonList] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://pokeapi.co/api/v2/pokemon-species?limit=1023",
+        );
+        const result = await response.json();
+        setPokemonList([result.results]);
+      } catch (error) {
+        console.error("All data fetching:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSearch = async () => {
+    setSearchDetails([]);
     if (search === "") {
       onReturnHandle("empty search");
       return;
     }
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${search}`,
-        );
-        if (!response.ok) {
-          onReturnHandle("not found");
-          return;
-        }
-        const result = await response.json();
-        setSearchDetails([result]);
-        onReturnHandle("ok");
-      } catch (error) {
-        console.error("Fetch Data Error:", error);
-      }
-    };
+    const data = pokemonList[0].filter((v) => v.name.includes(search));
+    if (search !== "" && data.length === 0) {
+      onReturnHandle("not found");
+      return;
+    }
+    try {
+      Promise.allSettled(
+        data.map(async (results) => {
+          const id = results.url.split("/");
+          const response = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${id[id.length - 2]}`,
+          );
+          const result = await response.json();
+          return result;
+        }),
+      ).then((result) => {
+        setSearchDetails([
+          ...new Set(
+            result.filter((a) => a.status === "fulfilled").map((a) => a.value),
+          ),
+        ]);
+      });
+    } catch (error) {
+      console.error("Fetch Data Error:", error);
+    }
 
-    fetchData();
+    if (searchDetails.length === 0) {
+      onReturnHandle("ok");
+    }
   };
 
   return (
@@ -62,7 +90,9 @@ const SearchPokemon = ({ onReturnHandle }) => {
                 value={search}
                 placeholder="Search Pokémon, e.g. Ivysaur..."
                 className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50 py-2 pl-11 pr-4 text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSearch();
