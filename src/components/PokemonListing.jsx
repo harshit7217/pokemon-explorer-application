@@ -3,8 +3,11 @@ import SearchPokemon from "./SearchPokemon.jsx";
 import EmptySearch from "./EmptySearch.jsx";
 import NotFound from "./NotFound.jsx";
 import PokemonCard from "./PokemonCard.jsx";
+import CardDesign from "./CardDesign.jsx";
 
 const PokemonListing = () => {
+  const cardReferencePage = 1;
+
   const [data, setData] = useState([]);
   const [pokemonDetailsList, setPokemonDetailsList] = useState([]);
   const [searchResult, setSearchResult] = useState("");
@@ -115,7 +118,11 @@ const PokemonListing = () => {
 
   return (
     <div className="font-serif">
-      <SearchPokemon onReturnHandle={setSearchResult} />
+      <SearchPokemon
+        onSetSearchResult={setSearchResult}
+        setPokemonDetail={setPokemonDetail}
+        pokemonDetail={pokemonDetail}
+      />
       <div>
         {pokemonDetail.length !== 0 && (
           <div>
@@ -132,62 +139,13 @@ const PokemonListing = () => {
       <div>
         {searchResult === "" && pokemonDetail.length === 0 ? (
           <div>
-            <div className="flex flex-wrap justify-center font-serif">
-              {pokemonDetailsList.map((pokemon) => (
-                <div
-                  key={pokemon.id}
-                  className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg p-4 m-4 flex-wrap min-w-[300px]"
-                >
-                  <div className=" text-lg font-serif">#{pokemon.id}</div>
-                  <img
-                    src={pokemon.sprites.front_default}
-                    alt={pokemon.name}
-                    className="w-32 h-32 object-contain mb-4 rounded-full border-2 border-gray-300 m-2"
-                  />
-                  <div className="font-bold text-lg font-serif">
-                    {pokemon.name}
-                  </div>
-                  <ul className="flex flex-wrap justify-center gap-10 ">
-                    {pokemon.types.map((type) => {
-                      return (
-                        <li
-                          key={type.type.name}
-                          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm italic text-slate-600"
-                        >
-                          {" "}
-                          {type.type.name}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <ul className="space-y-2">
-                    {pokemon.stats.map((stat) => {
-                      return (
-                        <li
-                          key={stat.stat.name}
-                          className="flex items-center gap-3 text-sm"
-                        >
-                          <span className="w-28 shrink-0 capitalize text-slate-600">
-                            {stat.stat.name.replace("-", " ")}
-                          </span>
-                          <span
-                            className={`w-8 shrink-0 text-right font-semibold tabular-nums ${stat.base_stat >= 100 ? "text-[#98ed99]" : stat.base_stat >= 60 ? "text-[#f7f52f]" : "text-[#ed837b]"}`}
-                          >
-                            {stat.base_stat}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer border hover:border"
-                    onClick={() => setPokemonDetail(() => [pokemon])}
-                  >
-                    Show More
-                  </button>
-                </div>
-              ))}
-            </div>
+            <CardDesign
+              searchDetails={pokemonDetailsList}
+              page={cardReferencePage}
+              showingCard={20}
+              onSetPokemonDetails={setPokemonDetail}
+            />
+
             {/* Button to fetch more Pokémon */}
             <div className="flex flex-wrap justify-center gap-4 m-4">
               {/* Button to fetch the first page of Pokémon data */}
