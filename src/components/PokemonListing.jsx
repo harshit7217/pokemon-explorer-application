@@ -149,14 +149,32 @@ const PokemonListing = () => {
                   </div>
                   <ul className="flex flex-wrap justify-center gap-10 ">
                     {pokemon.types.map((type) => {
-                      return <li key={type.type.name}>⚡{type.type.name}</li>;
+                      return (
+                        <li
+                          key={type.type.name}
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm italic text-slate-600"
+                        >
+                          {" "}
+                          {type.type.name}
+                        </li>
+                      );
                     })}
                   </ul>
-                  <ul className="flex flex-col flex-wrap justify-center items-center gap-1 pt-2">
+                  <ul className="space-y-2">
                     {pokemon.stats.map((stat) => {
                       return (
-                        <li key={stat.stat.name}>
-                          {stat.stat.name}: {stat.base_stat}
+                        <li
+                          key={stat.stat.name}
+                          className="flex items-center gap-3 text-sm"
+                        >
+                          <span className="w-28 shrink-0 capitalize text-slate-600">
+                            {stat.stat.name.replace("-", " ")}
+                          </span>
+                          <span
+                            className={`w-8 shrink-0 text-right font-semibold tabular-nums ${stat.base_stat >= 100 ? "text-[#98ed99]" : stat.base_stat >= 60 ? "text-[#f7f52f]" : "text-[#ed837b]"}`}
+                          >
+                            {stat.base_stat}
+                          </span>
                         </li>
                       );
                     })}
