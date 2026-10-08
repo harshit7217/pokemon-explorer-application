@@ -4,6 +4,7 @@ import EmptySearch from "./EmptySearch.jsx";
 import NotFound from "./NotFound.jsx";
 import PokemonCard from "./PokemonCard.jsx";
 import CardDesign from "./CardDesign.jsx";
+import Paging from "./Paging.jsx";
 
 const PokemonListing = () => {
   const cardReferencePage = 1;
@@ -37,7 +38,6 @@ const PokemonListing = () => {
   useEffect(() => {
     setIsLoading(true);
     try {
-      console.log(data);
       if (data.next !== null) {
         pageRef.current = data.next.split("=")[1].split("&")[0] / showingCards;
       } else {
@@ -83,7 +83,11 @@ const PokemonListing = () => {
   const handlePrevPage = async () => {
     try {
       if (!data.previous) return;
-      const response = await fetch(data.previous);
+      let url = data.previous;
+      if (pageRef.current === totalPageRef.current) {
+        url = `https://pokeapi.co/api/v2/pokemon-species/?offset=1000&limit=${showingCards}`;
+      }
+      const response = await fetch(url);
       const result = await response.json();
       setData(result);
     } catch (error) {
@@ -159,102 +163,16 @@ const PokemonListing = () => {
               </div>
             ) : null}
 
-            {/* Button to fetch more Pokémon */}
-            <div className="flex flex-wrap justify-center gap-4 m-4">
-              {/* Button to fetch the first page of Pokémon data */}
-              <button
-                onClick={() =>
-                  handlePage(
-                    `https://pokeapi.co/api/v2/pokemon-species/?offset=0&limit=${showingCards}`,
-                  )
-                }
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === 1 ? "hidden" : null}`}
-              >
-                First Page
-              </button>
-              {/* Button to fetch the previous page of Pokémon data */}
-              <button
-                onClick={handlePrevPage}
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === 1 ? "hidden" : null}`}
-              >
-                Prev Page
-              </button>
-
-              {/* Paging 1 to totalPageRef.current */}
-              <div className="flex flex-wrap justify-center  gap-2 min-w-[320px]">
-                {pageRef.current > totalPageRef.current / 2 ? (
-                  <div className="flex flex-wrap justify-center items-center text-lg  gap-1 ">
-                    <p className="flex flex-wrap justify-center items-center gap-2">
-                      {paging.slice(0, 1)}
-                    </p>
-                    <p className="font-bold text-blue-500"> ... </p>
-                    <div className="flex justify-center items-center gap-1">
-                      {pageRef.current >= totalPageRef.current - 2
-                        ? paging.slice(pageRef.current - 3, pageRef.current + 3)
-                        : paging.slice(
-                            pageRef.current - 3,
-                            pageRef.current + 2,
-                          )}
-                      {pageRef.current < totalPageRef.current - 3 && (
-                        <div className="flex flex-wrap justify-center items-center text-lg">
-                          <p className="font-bold text-blue-500">...</p>
-                          <p className="flex flex-wrap justify-center items-center">
-                            {paging.slice(
-                              totalPageRef.current - 1,
-                              totalPageRef.current,
-                            )}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-center items-center text-lg  gap-1">
-                    <div className="flex flex-wrap justify-center items-center gap-2">
-                      {pageRef.current > 2 && (
-                        <div className="flex flex-wrap justify-center items-center text-lg">
-                          <p className="flex flex-wrap justify-center items-center">
-                            {paging.slice(0, 1)}
-                          </p>
-                          <p className="font-bold text-blue-500">...</p>
-                        </div>
-                      )}
-                      {pageRef.current === 1
-                        ? paging.slice(pageRef.current - 1, pageRef.current + 4)
-                        : paging.slice(
-                            pageRef.current - 2,
-                            pageRef.current + 3,
-                          )}
-                    </div>
-                    <p className="font-bold text-blue-500"> ... </p>
-                    <p className="flex flex-wrap justify-center items-center gap-2">
-                      {paging.slice(
-                        totalPageRef.current - 1,
-                        totalPageRef.current,
-                      )}
-                    </p>
-                  </div>
-                )}
-              </div>
-              {/* Button of next page */}
-              <button
-                onClick={handleNextPage}
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === totalPageRef.current ? "hidden" : null}`}
-              >
-                Next Page
-              </button>
-              {/* Button of last page */}
-              <button
-                onClick={() =>
-                  handlePage(
-                    `https://pokeapi.co/api/v2/pokemon-species/?offset=1020&limit=${showingCards}`,
-                  )
-                }
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === totalPageRef.current ? "hidden" : null}`}
-              >
-                Last Page
-              </button>
-            </div>
+            {/* Button to fetch more Pokémon - Paging System */}
+            <Paging
+              showingCards={showingCards}
+              pageRef={pageRef}
+              paging={paging}
+              totalPageRef={totalPageRef}
+              onHandlePage={handlePage}
+              onHandlePrevPage={handlePrevPage}
+              onHandleNextPage={handleNextPage}
+            />
           </div>
         ) : searchResult === "empty search" ? (
           <EmptySearch />
