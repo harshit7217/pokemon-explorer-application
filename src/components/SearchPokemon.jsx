@@ -9,7 +9,6 @@ const SearchPokemon = ({
   const [search, setSearch] = useState("");
   const [searchDetails, setSearchDetails] = useState([]);
   const [pokemonList, setPokemonList] = useState([]);
-  const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const showingCard = 10;
   const [page, setPage] = useState(1);
@@ -55,7 +54,6 @@ const SearchPokemon = ({
         }),
       ).then((result) => {
         setIsLoading(false);
-        setCount(result.length);
         setSearchDetails([
           ...new Set(
             result.filter((a) => a.status === "fulfilled").map((a) => a.value),
