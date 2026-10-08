@@ -7,13 +7,16 @@ import CardDesign from "./CardDesign.jsx";
 
 const PokemonListing = () => {
   const cardReferencePage = 1;
+  const showingCards = 20;
 
   const [data, setData] = useState([]);
   const [pokemonDetailsList, setPokemonDetailsList] = useState([]);
   const [searchResult, setSearchResult] = useState("");
   const [pokemonDetail, setPokemonDetail] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const pageRef = useRef(1);
+  const totalPageRef = useRef(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +25,7 @@ const PokemonListing = () => {
           "https://pokeapi.co/api/v2/pokemon-species/",
         );
         const result = await response.json();
+        totalPageRef.current = Math.floor(result.count / showingCards) + 1;
         setData(result);
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
@@ -31,32 +35,34 @@ const PokemonListing = () => {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (data.next !== null) {
-          let a = data.next.split("=")[1].split("&")[0] / 20;
-          pageRef.current = a;
-        }
-        Promise.allSettled(
-          data.results?.map(async (pokemon) => {
-            const id = pokemon.url.split("/");
-            const url = "https://pokeapi.co/api/v2/pokemon/" + id[6];
-            const response = await fetch(url);
-            const result = await response.json();
-            return result;
-          }),
-        ).then((results) => {
-          setPokemonDetailsList(
-            results
-              .filter((result) => result.status === "fulfilled")
-              .map((result) => result.value),
-          );
-        });
-      } catch (error) {
-        console.error("Error fetching Pokémon data:", error);
+    setIsLoading(true);
+    try {
+      console.log(data);
+      if (data.next !== null) {
+        pageRef.current = data.next.split("=")[1].split("&")[0] / showingCards;
+      } else {
+        pageRef.current = totalPageRef.current;
       }
-    };
-    fetchData();
+      Promise.allSettled(
+        data.results?.map(async (pokemon) => {
+          const id = pokemon.url.split("/");
+          const url = "https://pokeapi.co/api/v2/pokemon/" + id[id.length - 2];
+          const response = await fetch(url);
+          const result = await response.json();
+          return result;
+        }),
+      ).then((results) => {
+        setPokemonDetailsList(
+          results
+            .filter((result) => result.status === "fulfilled")
+            .map((result) => result.value),
+        );
+        setIsLoading(false);
+      });
+    } catch (error) {
+      console.error("Error fetching Pokémon data:", error);
+    }
+    setIsLoading(false);
   }, [data]);
 
   // Button click handler to fetch the next page of Pokémon data
@@ -92,7 +98,7 @@ const PokemonListing = () => {
       const result = await response.json();
       setData(result);
       if (result.next === null) {
-        pageRef.current = 52;
+        pageRef.current = totalPageRef.current;
       }
     } catch (error) {
       console.error(
@@ -102,15 +108,15 @@ const PokemonListing = () => {
     }
   };
 
-  const paging = Array.from({ length: 52 }, (_, index) => (
+  const paging = Array.from({ length: totalPageRef.current }, (_, index) => (
     <button
       key={index + 1}
       onClick={() =>
         handlePage(
-          `https://pokeapi.co/api/v2/pokemon-species/?offset=${index * 20}&limit=20`,
+          `https://pokeapi.co/api/v2/pokemon-species/?offset=${index * showingCards}&limit=${showingCards}`,
         )
       }
-      className="text-blue-500 cursor-pointer hover:text-blue-900 rounded"
+      className={` cursor-pointer hover:text-blue-900 rounded ${index + 1 === pageRef.current ? "text-blue-900" : "text-blue-500"}`}
     >
       {index + 1}
     </button>
@@ -142,9 +148,16 @@ const PokemonListing = () => {
             <CardDesign
               searchDetails={pokemonDetailsList}
               page={cardReferencePage}
-              showingCard={20}
+              showingCard={showingCards}
               onSetPokemonDetails={setPokemonDetail}
             />
+
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-3">
+                <div className="loader" role="status" aria-label="Loading" />
+                <span className="text-sm text-slate-500">Loading...</span>
+              </div>
+            ) : null}
 
             {/* Button to fetch more Pokémon */}
             <div className="flex flex-wrap justify-center gap-4 m-4">
@@ -152,40 +165,44 @@ const PokemonListing = () => {
               <button
                 onClick={() =>
                   handlePage(
-                    "https://pokeapi.co/api/v2/pokemon-species/?offset=0&limit=20",
+                    `https://pokeapi.co/api/v2/pokemon-species/?offset=0&limit=${showingCards}`,
                   )
                 }
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border"
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === 1 ? "hidden" : null}`}
               >
                 First Page
               </button>
               {/* Button to fetch the previous page of Pokémon data */}
               <button
                 onClick={handlePrevPage}
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border"
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === 1 ? "hidden" : null}`}
               >
                 Prev Page
               </button>
-              {/* Paging 1 to 52 */}
+
+              {/* Paging 1 to totalPageRef.current */}
               <div className="flex flex-wrap justify-center  gap-2 min-w-[320px]">
-                {pageRef.current > 25 ? (
+                {pageRef.current > totalPageRef.current / 2 ? (
                   <div className="flex flex-wrap justify-center items-center text-lg  gap-1 ">
                     <p className="flex flex-wrap justify-center items-center gap-2">
                       {paging.slice(0, 1)}
                     </p>
                     <p className="font-bold text-blue-500"> ... </p>
                     <div className="flex justify-center items-center gap-1">
-                      {pageRef.current >= 50
+                      {pageRef.current >= totalPageRef.current - 2
                         ? paging.slice(pageRef.current - 3, pageRef.current + 3)
                         : paging.slice(
                             pageRef.current - 3,
                             pageRef.current + 2,
                           )}
-                      {pageRef.current < 49 && (
+                      {pageRef.current < totalPageRef.current - 3 && (
                         <div className="flex flex-wrap justify-center items-center text-lg">
                           <p className="font-bold text-blue-500">...</p>
                           <p className="flex flex-wrap justify-center items-center">
-                            {paging.slice(51, 52)}
+                            {paging.slice(
+                              totalPageRef.current - 1,
+                              totalPageRef.current,
+                            )}
                           </p>
                         </div>
                       )}
@@ -211,7 +228,10 @@ const PokemonListing = () => {
                     </div>
                     <p className="font-bold text-blue-500"> ... </p>
                     <p className="flex flex-wrap justify-center items-center gap-2">
-                      {paging.slice(51, 52)}
+                      {paging.slice(
+                        totalPageRef.current - 1,
+                        totalPageRef.current,
+                      )}
                     </p>
                   </div>
                 )}
@@ -219,7 +239,7 @@ const PokemonListing = () => {
               {/* Button of next page */}
               <button
                 onClick={handleNextPage}
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border"
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === totalPageRef.current ? "hidden" : null}`}
               >
                 Next Page
               </button>
@@ -227,10 +247,10 @@ const PokemonListing = () => {
               <button
                 onClick={() =>
                   handlePage(
-                    "https://pokeapi.co/api/v2/pokemon-species/?offset=1020&limit=20",
+                    `https://pokeapi.co/api/v2/pokemon-species/?offset=1020&limit=${showingCards}`,
                   )
                 }
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border"
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-[#f2f5f3] hover:text-blue-500 cursor-pointer hover:border border ${pageRef.current === totalPageRef.current ? "hidden" : null}`}
               >
                 Last Page
               </button>
