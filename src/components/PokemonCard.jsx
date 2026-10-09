@@ -48,7 +48,6 @@ const SectionTitle = ({ children }) => (
 
 export default function PokemonCard({ pokemon }) {
   if (!pokemon) return null;
-
   const { name, id, sprites, types, height, weight, abilities, stats, moves } =
     pokemon;
 
