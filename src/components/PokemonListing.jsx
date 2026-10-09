@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import SearchPokemon from "./SearchPokemon.jsx";
-import EmptySearch from "./EmptySearch.jsx";
 import NotFound from "./NotFound.jsx";
-import PokemonCard from "./PokemonCard.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
 
@@ -91,6 +89,7 @@ const PokemonListing = () => {
 
   useEffect(() => {
     fetchPokemonList();
+    setTotalElementsPerPage(20);
   }, []);
 
   useEffect(() => {
