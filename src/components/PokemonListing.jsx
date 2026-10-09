@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import SearchPokemon from "./SearchPokemon.jsx";
 import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
+import PokemonCard from "./PokemonCard.jsx";
+import Button from "./Button.jsx";
 
 const PokemonListing = () => {
   const [mainList, setMainList] = useState([]);
@@ -11,6 +13,7 @@ const PokemonListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalElementsPerPage, setTotalElementsPerPage] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
+  const [pokemonCard, setPokemonCard] = useState([]);
 
   const fetchPokemonList = async () => {
     setIsLoading(true);
@@ -87,6 +90,10 @@ const PokemonListing = () => {
     setDataList(temp);
   };
 
+  const onSetPokemonDetails = (data) => {
+    setPokemonCard([data]);
+  };
+
   useEffect(() => {
     fetchPokemonList();
     setTotalElementsPerPage(20);
@@ -106,13 +113,21 @@ const PokemonListing = () => {
 
       {searchTerm !== "" && dataList.length === 0 ? (
         <NotFound />
+      ) : pokemonCard.length === 1 ? (
+        <div>
+          <Button title={"Back"} onClick={() => setPokemonCard([])} />
+          <PokemonCard
+            pokemon={pokemonCard[0]}
+            onSetPokemonDetails={onSetPokemonDetails}
+          />
+        </div>
       ) : (
         <div>
           {Array.isArray(dataList) && dataList.length > 0 && (
             <div>
               <CardDesign
                 searchDetails={dataList}
-                onSetPokemonDetails={() => {}}
+                onSetPokemonDetails={onSetPokemonDetails}
               />
               {isLoading ? (
                 <div className="flex flex-col items-center gap-3">
