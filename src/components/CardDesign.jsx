@@ -85,7 +85,7 @@ const CardDesign = ({ searchDetails, onSetPokemonDetails }) => {
               </div>
               <button
                 type="button"
-                onClick={() => onSetPokemonDetails([pokemon])}
+                onClick={() => onSetPokemonDetails(pokemon)}
                 className="group mt-4 inline-flex items-center gap-2 rounded-full border border-blue-500 bg-blue-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-white hover:text-blue-500 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 active:scale-95 cursor-pointer"
               >
                 Show More
