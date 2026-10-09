@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
-import SearchPokemon from "./SearchPokemon.jsx";
 import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
 import PokemonCard from "./PokemonCard.jsx";
 import Button from "./Button.jsx";
 
-const PokemonListing = () => {
-  const [mainList, setMainList] = useState([]);
-  const [dataList, setDataList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalElementsPerPage, setTotalElementsPerPage] = useState(20);
-  const [isLoading, setIsLoading] = useState(false);
+const PokemonListing = ({
+  searchTerm,
+  totalElementsPerPage,
+  onHandlePageAndSearch,
+  setTotalElementsPerPage,
+  currentPage,
+  searchList,
+  mainList,
+  setIsLoading,
+  dataList,
+  setMainList,
+  isLoading,
+}) => {
   const [pokemonCard, setPokemonCard] = useState([]);
 
   const fetchPokemonList = async () => {
@@ -30,66 +35,6 @@ const PokemonListing = () => {
     }
   };
 
-  const fetchPokemonDetails = async (arr) => {
-    setIsLoading(true);
-    return new Promise((resolve, reject) => {
-      try {
-        Promise.allSettled(
-          arr.map(async (results) => {
-            const id = results.url.split("/");
-            const response = await fetch(
-              `https://pokeapi.co/api/v2/pokemon/${id[id.length - 2]}`,
-            );
-            const result = await response.json();
-            return result;
-          }),
-        ).then((result) => {
-          const data = result
-            .filter((a) => a.status === "fulfilled")
-            .map((a) => a.value);
-
-          resolve(data);
-        });
-      } catch (err) {
-        reject(err);
-      } finally {
-        setIsLoading(false);
-      }
-    });
-  };
-
-  const searchList = () => {
-    const searchIncludingElements = mainList.filter((val) =>
-      val.name.includes(searchTerm),
-    );
-    return searchIncludingElements;
-  };
-
-  const findingCurrentElements = (page, status) => {
-    let arr;
-    if (status === "clear") {
-      arr = mainList.slice(
-        (page - 1) * totalElementsPerPage,
-        page * totalElementsPerPage,
-      );
-    } else {
-      const searchIncludingElements = searchList();
-
-      arr = searchIncludingElements.slice(
-        (page - 1) * totalElementsPerPage,
-        page * totalElementsPerPage,
-      );
-    }
-    return arr;
-  };
-
-  const onHandlePageAndSearch = async (page = 1, status) => {
-    setCurrentPage(page);
-    const arr = findingCurrentElements(page, status);
-    const temp = await fetchPokemonDetails(arr);
-    setDataList(temp);
-  };
-
   const onSetPokemonDetails = (data) => {
     setPokemonCard([data]);
   };
@@ -105,12 +50,6 @@ const PokemonListing = () => {
 
   return (
     <div className="font-serif">
-      <SearchPokemon
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onClickSearch={onHandlePageAndSearch}
-      />
-
       {searchTerm !== "" && dataList.length === 0 ? (
         <NotFound />
       ) : pokemonCard.length === 1 ? (
