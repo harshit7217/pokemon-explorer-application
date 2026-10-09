@@ -24,7 +24,7 @@ const Page = ({ currentPage, totalPage, onHandlePage }) => {
     <div className="flex">
       {currentPage !== 1 ? (
         <div>
-          <PageButton i={1} onHandlePage={onHandlePage} page={1} />
+          <PageButton i={1 - 1} onHandlePage={onHandlePage} page={1} />
           <span>.....</span>
         </div>
       ) : null}
@@ -33,7 +33,7 @@ const Page = ({ currentPage, totalPage, onHandlePage }) => {
         <div>
           <span>.....</span>
           <PageButton
-            i={totalPage}
+            i={totalPage - 1}
             onHandlePage={onHandlePage}
             page={totalPage}
           />
