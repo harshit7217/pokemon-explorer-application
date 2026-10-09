@@ -2,6 +2,8 @@
 // Requires Tailwind CSS. Class names are written out in full (not built from
 // strings) so Tailwind's compiler can detect them.
 
+import FavoriteToggleButton from "./FavoriteToggleButton";
+
 const TYPE_STYLES = {
   normal: "bg-stone-400 text-white",
   fire: "bg-orange-500 text-white",
@@ -62,6 +64,7 @@ export default function PokemonCard({ pokemon }) {
         <span className="absolute left-5 top-5 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold backdrop-blur">
           #{String(id).padStart(3, "0")}
         </span>
+        <FavoriteToggleButton pokemon={pokemon} />
 
         <div className="rounded-full bg-white/90 p-3 shadow-lg ring-4 ring-white/40">
           <img
