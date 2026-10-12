@@ -1,4 +1,8 @@
+import { useDebounce, useDebouncedCallback } from "use-debounce";
+
 const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
+  const search = useDebouncedCallback(onClickSearch, 1000);
+
   return (
     <div>
       <div className="border-b border-slate-200 bg-white shadow-sm pl-[70px]">
@@ -50,6 +54,7 @@ const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
                 className="h-12 w-full rounded-xl border border-slate-200 bg-white py-2 pl-12 pr-11 text-base text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
+                  search();
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -63,7 +68,10 @@ const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
                 <button
                   type="button"
                   aria-label="Clear search"
-                  onClick={() => setSearchTerm("")}
+                  onClick={() => {
+                    search();
+                    setSearchTerm("");
+                  }}
                   className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                 >
                   <svg
