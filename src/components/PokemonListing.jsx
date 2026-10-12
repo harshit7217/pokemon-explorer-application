@@ -24,8 +24,11 @@ const PokemonListing = ({
   const fetchPokemonList = async () => {
     setIsLoading(true);
     try {
+      const temp = await fetch("https://pokeapi.co/api/v2/pokemon-species");
+      const temp2 = await temp.json();
+      const count = temp2.count;
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon-species?limit=1025",
+        `https://pokeapi.co/api/v2/pokemon-species?limit=${count}`,
       );
       const result = await response.json();
       setMainList(result.results);
@@ -46,7 +49,7 @@ const PokemonListing = ({
   }, [mainList]);
 
   return (
-    <div className="font-serif">
+    <div className="font-serif pl-[70px]">
       {searchTerm !== "" && dataList.length === 0 ? (
         <NotFound />
       ) : pokemonCard.length === 1 ? (
