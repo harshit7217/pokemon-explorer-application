@@ -85,7 +85,9 @@ const PokemonListing = ({
             currentPage={currentPage}
             totalPage={
               isFilter !== ""
-                ? Math.ceil(typeFilterData.length / totalElementsPerPage)
+                ? searchTerm !== ""
+                  ? Math.ceil(searchList().length / totalElementsPerPage)
+                  : Math.ceil(typeFilterData.length / totalElementsPerPage)
                 : searchTerm === ""
                   ? Math.ceil(mainList.length / totalElementsPerPage)
                   : Math.ceil(searchList().length / totalElementsPerPage)

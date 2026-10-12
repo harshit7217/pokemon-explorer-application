@@ -118,8 +118,13 @@ function App() {
 
   const findingCurrentElements = (page) => {
     let arr;
-    if (isFilter !== "" && searchTerm === "") {
-      arr = pokemonTypeFilterList(page);
+    if (isFilter !== "") {
+      if (searchTerm !== "") {
+        console.log("search in filter");
+        arr = pokemonSearchList(page);
+      } else {
+        arr = pokemonTypeFilterList(page);
+      }
     } else if (searchTerm === "") {
       arr = pokemonDataList(page);
     } else {
@@ -136,9 +141,13 @@ function App() {
   };
 
   const searchList = () => {
-    const searchIncludingElements = mainList.filter((val) =>
-      val.name.includes(searchTerm.toLowerCase()),
-    );
+    console.log(typeFilterData);
+    const searchIncludingElements =
+      isFilter !== ""
+        ? typeFilterData.filter((val) =>
+            val.pokemon.name.includes(searchTerm.toLowerCase()),
+          )
+        : mainList.filter((val) => val.name.includes(searchTerm.toLowerCase()));
     return searchIncludingElements;
   };
 

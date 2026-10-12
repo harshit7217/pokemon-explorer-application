@@ -23,15 +23,31 @@ const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
           {/* Search Area */}
           <div className="flex w-full max-w-2xl flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400">
-                🔍
-              </span>
+              <label htmlFor="pokemon-search" className="sr-only">
+                Search Pokémon
+              </label>
+
+              {/* Search icon */}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8.5 3a5.5 5.5 0 013.9 9.4l3.6 3.6a.75.75 0 11-1.06 1.06l-3.6-3.6A5.5 5.5 0 118.5 3zm0 1.5a4 4 0 100 8 4 4 0 000-8z"
+                  clipRule="evenodd"
+                />
+              </svg>
 
               <input
+                id="pokemon-search"
                 type="text"
                 value={searchTerm}
                 placeholder="Search Pokémon, e.g. Ivysaur..."
-                className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50 py-2 pl-11 pr-4 text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                autoComplete="off"
+                className="h-12 w-full rounded-xl border border-slate-200 bg-white py-2 pl-12 pr-11 text-base text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
                 }}
@@ -41,25 +57,25 @@ const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
                   }
                 }}
               />
-            </div>
 
-            <div className="flex gap-2">
-              <button
-                className="h-12 rounded-xl bg-blue-600 px-6 font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md active:scale-95"
-                onClick={() => onClickSearch(1)}
-              >
-                Search
-              </button>
-
-              <button
-                className="h-12 rounded-xl border border-slate-300 bg-white px-6 font-semibold text-slate-600 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600 active:scale-95"
-                onClick={() => {
-                  setSearchTerm("");
-                  onClickSearch(1, "clear");
-                }}
-              >
-                Clear
-              </button>
+              {/* Clear button (only when there is text) */}
+              {searchTerm && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    fill="red"
+                    className="h-4 w-4"
+                  >
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </div>
