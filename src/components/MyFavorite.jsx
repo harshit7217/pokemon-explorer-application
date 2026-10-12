@@ -9,9 +9,8 @@ const MyFavorite = ({
   typeFilterData,
   isFilter,
   searchTerm,
+  localStorageKey,
 }) => {
-  const localStorageKey = Object.keys(localStorage);
-
   const items = localStorageKey.map((val) => {
     const store = localStorage.getItem(val);
     return JSON.parse(store);
@@ -30,10 +29,8 @@ const MyFavorite = ({
           return item.name.includes(searchTerm);
         });
 
-  console.log(searchItems);
-
   return (
-    <div>
+    <div className="pl-[70px]">
       {pokemonCard?.length === 1 ? (
         <div>
           <Button title={"Back"} onClick={() => setPokemonCard([])} />

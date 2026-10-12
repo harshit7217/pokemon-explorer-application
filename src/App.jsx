@@ -5,6 +5,7 @@ import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
+import SortingById from "./components/SortingById.jsx";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -17,6 +18,10 @@ function App() {
   const [isFilter, setIsFilter] = useState("");
   const [typeFilterList, setTypeFilterList] = useState([]);
   const [typeFilterData, setTypeFilterData] = useState([]);
+  const [sortId, setSortId] = useState("ascending");
+  const [localStorageKey, setLocalStorageKey] = useState(
+    Object.keys(localStorage).sort((a, b) => a - b),
+  );
 
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
@@ -96,8 +101,8 @@ function App() {
 
   useEffect(() => {
     fetchingTypeFilterList();
-    onHandlePageAndSearch(1);
-  }, [mainList]);
+    onHandlePageAndSearch();
+  }, [mainList, sortId]);
 
   const pokemonDataList = (page) => {
     return mainList.slice(
@@ -159,6 +164,20 @@ function App() {
     setPokemonCard([data]);
   };
 
+  const onHandleOrder = () => {
+    if (sortId !== "ascending") {
+      setMainList(mainList.reverse());
+      setTypeFilterData(typeFilterData.reverse());
+      setLocalStorageKey(localStorageKey.sort((a, b) => a - b));
+      setSortId("ascending");
+    } else if (sortId !== "descending") {
+      setMainList(mainList.reverse());
+      setTypeFilterData(typeFilterData.reverse());
+      setLocalStorageKey(localStorageKey.sort((a, b) => b - a));
+      setSortId("descending");
+    }
+  };
+
   return (
     <BrowserRouter>
       {/* Navigation */}
@@ -170,11 +189,14 @@ function App() {
 
       <Sidebar />
 
-      <TypeFilter
-        isFilter={isFilter}
-        setIsFilter={setIsFilter}
-        typeFilterList={typeFilterList}
-      />
+      <div className="flex">
+        <TypeFilter
+          isFilter={isFilter}
+          setIsFilter={setIsFilter}
+          typeFilterList={typeFilterList}
+        />
+        <SortingById onHandleOrder={onHandleOrder} sortId={sortId} />
+      </div>
 
       {/* Routes */}
       <Routes>
@@ -212,6 +234,7 @@ function App() {
               typeFilterData={typeFilterData}
               isFilter={isFilter}
               searchTerm={searchTerm}
+              localStorageKey={localStorageKey}
             />
           }
         />
