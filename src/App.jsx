@@ -40,11 +40,10 @@ function App() {
             .map((a) => a.value);
 
           resolve(data);
+          setIsLoading(false);
         });
       } catch (err) {
         reject(err);
-      } finally {
-        setIsLoading(false);
       }
     });
   };
@@ -63,10 +62,9 @@ function App() {
       );
       const result2 = await response2.json();
       setTypeFilterList(result2.results);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -79,10 +77,9 @@ function App() {
       );
       const result = await response.json();
       setTypeFilterData(result.pokemon);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -119,11 +116,11 @@ function App() {
     );
   };
 
-  const findingCurrentElements = (page, status) => {
+  const findingCurrentElements = (page) => {
     let arr;
-    if (isFilter !== "") {
+    if (isFilter !== "" && searchTerm === "") {
       arr = pokemonTypeFilterList(page);
-    } else if (status === "clear") {
+    } else if (searchTerm === "") {
       arr = pokemonDataList(page);
     } else {
       arr = pokemonSearchList(page);
@@ -131,9 +128,9 @@ function App() {
     return arr;
   };
 
-  const onHandlePageAndSearch = async (page = 1, status) => {
+  const onHandlePageAndSearch = async (page = 1) => {
     setCurrentPage(page);
-    const arr = findingCurrentElements(page, status);
+    const arr = findingCurrentElements(page);
     const temp = await fetchPokemonDetails(arr);
     setDataList(temp);
   };
