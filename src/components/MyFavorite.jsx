@@ -10,8 +10,6 @@ const MyFavorite = ({ onSetPokemonDetails, pokemonCard, setPokemonCard }) => {
     return JSON.parse(store);
   });
 
-  console.log(items);
-
   return (
     <div>
       {pokemonCard?.length === 1 ? (

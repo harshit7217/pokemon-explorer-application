@@ -1,8 +1,9 @@
 import PokemonListing from "./components/PokemonListing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, data } from "react-router-dom";
 import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
+import Sidebar from "./components/SideBar.jsx";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -86,8 +87,9 @@ function App() {
         setSearchTerm={setSearchTerm}
         onClickSearch={onHandlePageAndSearch}
       />
-      <Link to="/">Home</Link>
-      <Link to="/my-favorite">MyFavorite</Link>
+      {/* <Link to="/">Home</Link>
+      <Link to="/my-favorite">MyFavorite</Link> */}
+      <Sidebar />
       {/* Routes */}
       <Routes>
         <Route

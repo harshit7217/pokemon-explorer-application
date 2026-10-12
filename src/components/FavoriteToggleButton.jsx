@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 const FavoriteToggleButton = ({ pokemon }) => {
   const [myFavorite, setMyFavorite] = useState({});
-  console.log(myFavorite);
   const isFavorite = !!localStorage.getItem(pokemon.id);
-  useEffect(() => {}, [isFavorite]);
   return (
     <button
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
