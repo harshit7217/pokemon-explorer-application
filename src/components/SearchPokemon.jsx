@@ -1,7 +1,7 @@
 const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
   return (
     <div>
-      <div className="border-b border-slate-200 bg-white shadow-sm">
+      <div className="border-b border-slate-200 bg-white shadow-sm pl-[70px]">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
           {/* Logo / Title */}
           <div className="flex items-center gap-3">

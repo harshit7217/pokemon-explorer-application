@@ -20,6 +20,9 @@ const PokemonListing = ({
   onSetPokemonDetails,
   pokemonCard,
   setPokemonCard,
+  fetchingTypeFilterList,
+  isFilter,
+  typeFilterData,
 }) => {
   const fetchPokemonList = async () => {
     setIsLoading(true);
@@ -45,6 +48,7 @@ const PokemonListing = ({
   }, []);
 
   useEffect(() => {
+    fetchingTypeFilterList();
     onHandlePageAndSearch(1);
   }, [mainList]);
 
@@ -80,9 +84,11 @@ const PokemonListing = ({
           <Paging
             currentPage={currentPage}
             totalPage={
-              searchTerm === ""
-                ? Math.ceil(mainList.length / totalElementsPerPage)
-                : Math.ceil(searchList().length / totalElementsPerPage)
+              isFilter !== ""
+                ? Math.ceil(typeFilterData.length / totalElementsPerPage)
+                : searchTerm === ""
+                  ? Math.ceil(mainList.length / totalElementsPerPage)
+                  : Math.ceil(searchList().length / totalElementsPerPage)
             }
             onHandlePage={onHandlePageAndSearch}
           />
