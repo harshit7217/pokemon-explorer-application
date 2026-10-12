@@ -17,14 +17,15 @@ const PokemonListing = ({
   dataList,
   setMainList,
   isLoading,
+  onSetPokemonDetails,
+  pokemonCard,
+  setPokemonCard,
 }) => {
-  const [pokemonCard, setPokemonCard] = useState([]);
-
   const fetchPokemonList = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon-species?limit=1023",
+        "https://pokeapi.co/api/v2/pokemon-species?limit=1025",
       );
       const result = await response.json();
       setMainList(result.results);
@@ -33,10 +34,6 @@ const PokemonListing = ({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const onSetPokemonDetails = (data) => {
-    setPokemonCard([data]);
   };
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import PokemonListing from "./components/PokemonListing";
-import { StrictMode } from "react";
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, data } from "react-router-dom";
 import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 
@@ -12,6 +11,7 @@ function App() {
   const [totalElementsPerPage, setTotalElementsPerPage] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pokemonCard, setPokemonCard] = useState([]);
 
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
@@ -24,6 +24,7 @@ function App() {
               `https://pokeapi.co/api/v2/pokemon/${id[id.length - 2]}`,
             );
             const result = await response.json();
+            // console.log(result);
             return result;
           }),
         ).then((result) => {
@@ -68,9 +69,13 @@ function App() {
 
   const searchList = () => {
     const searchIncludingElements = mainList.filter((val) =>
-      val.name.includes(searchTerm),
+      val.name.includes(searchTerm.toLowerCase()),
     );
     return searchIncludingElements;
+  };
+
+  const onSetPokemonDetails = (data) => {
+    setPokemonCard([data]);
   };
 
   return (
@@ -81,12 +86,12 @@ function App() {
         setSearchTerm={setSearchTerm}
         onClickSearch={onHandlePageAndSearch}
       />
-      <Link to="/home">Home</Link>
+      <Link to="/">Home</Link>
       <Link to="/my-favorite">MyFavorite</Link>
       {/* Routes */}
       <Routes>
         <Route
-          path="/home"
+          path="/"
           element={
             <PokemonListing
               searchTerm={searchTerm}
@@ -100,10 +105,23 @@ function App() {
               dataList={dataList}
               setMainList={setMainList}
               isLoading={isLoading}
+              onSetPokemonDetails={onSetPokemonDetails}
+              pokemonCard={pokemonCard}
+              setPokemonCard={setPokemonCard}
             />
           }
         />
-        <Route path="/my-favorite" element={<MyFavorite />} />
+        <Route
+          path="/my-favorite"
+          element={
+            <MyFavorite
+              dataList={dataList}
+              onSetPokemonDetails={onSetPokemonDetails}
+              pokemonCard={pokemonCard}
+              setPokemonCard={setPokemonCard}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
