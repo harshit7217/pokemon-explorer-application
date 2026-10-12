@@ -51,14 +51,12 @@ function App() {
   const fetchingTypeFilterList = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        "https://pokeapi.co/api/v2/type?offset=1&limit=21",
-      );
+      const response = await fetch("https://pokeapi.co/api/v2/type");
       const result = await response.json();
       const count = result.count;
 
       const response2 = await fetch(
-        `https://pokeapi.co/api/v2/type?offset=1&limit=${count}`,
+        `https://pokeapi.co/api/v2/type?offset=0&limit=${count}`,
       );
       const result2 = await response2.json();
       setTypeFilterList(result2.results);
@@ -84,6 +82,9 @@ function App() {
   };
 
   useEffect(() => {
+    if (isFilter === "") {
+      onHandlePageAndSearch();
+    }
     if (isFilter !== "") {
       fetchingTypeFilterData();
     }
@@ -92,6 +93,11 @@ function App() {
   useEffect(() => {
     onHandlePageAndSearch();
   }, [typeFilterData]);
+
+  useEffect(() => {
+    fetchingTypeFilterList();
+    onHandlePageAndSearch(1);
+  }, [mainList]);
 
   const pokemonDataList = (page) => {
     return mainList.slice(
@@ -120,7 +126,6 @@ function App() {
     let arr;
     if (isFilter !== "") {
       if (searchTerm !== "") {
-        console.log("search in filter");
         arr = pokemonSearchList(page);
       } else {
         arr = pokemonTypeFilterList(page);
@@ -141,7 +146,6 @@ function App() {
   };
 
   const searchList = () => {
-    console.log(typeFilterData);
     const searchIncludingElements =
       isFilter !== ""
         ? typeFilterData.filter((val) =>
@@ -192,7 +196,6 @@ function App() {
               onSetPokemonDetails={onSetPokemonDetails}
               pokemonCard={pokemonCard}
               setPokemonCard={setPokemonCard}
-              fetchingTypeFilterList={fetchingTypeFilterList}
               isFilter={isFilter}
               typeFilterData={typeFilterData}
             />
@@ -206,6 +209,9 @@ function App() {
               onSetPokemonDetails={onSetPokemonDetails}
               pokemonCard={pokemonCard}
               setPokemonCard={setPokemonCard}
+              typeFilterData={typeFilterData}
+              isFilter={isFilter}
+              searchTerm={searchTerm}
             />
           }
         />

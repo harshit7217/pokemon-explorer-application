@@ -20,7 +20,6 @@ const PokemonListing = ({
   onSetPokemonDetails,
   pokemonCard,
   setPokemonCard,
-  fetchingTypeFilterList,
   isFilter,
   typeFilterData,
 }) => {
@@ -46,11 +45,6 @@ const PokemonListing = ({
     fetchPokemonList();
     setTotalElementsPerPage(20);
   }, []);
-
-  useEffect(() => {
-    fetchingTypeFilterList();
-    onHandlePageAndSearch(1);
-  }, [mainList]);
 
   return (
     <div className="font-serif pl-[70px]">
