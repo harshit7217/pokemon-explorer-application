@@ -48,7 +48,7 @@ const MyFavorite = ({
           ? searchItems
           : items;
     setData(temp);
-  }, [myFavorite, sort]);
+  }, [myFavorite, sort, typeFilterData, searchTerm]);
 
   return (
     <div className="pl-[70px]">
