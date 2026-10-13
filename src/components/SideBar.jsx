@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const HomeIcon = () => (
@@ -59,11 +58,6 @@ export default function Sidebar() {
             </NavLink>
           ))}
         </nav>
-
-        {/* <div className="sidebar__footer">
-          <span className="sidebar__avatar">U</span>
-          {!collapsed && <span className="sidebar__user">Your Account</span>}
-        </div> */}
       </aside>
     </div>
   );
