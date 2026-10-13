@@ -5,8 +5,7 @@ import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
-import SortingById from "./components/SortingById.jsx";
-import SortingByName from "./components/SortingByName.jsx";
+import Sorting from "./components/Sorting.jsx";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -19,12 +18,13 @@ function App() {
   const [isFilter, setIsFilter] = useState("");
   const [typeFilterList, setTypeFilterList] = useState([]);
   const [typeFilterData, setTypeFilterData] = useState([]);
-  const [sort, setSort] = useState("");
+  const [sortById, setSortById] = useState("");
   const [localStorageKey, setLocalStorageKey] = useState(
     Object.keys(localStorage),
   );
   const [myFavorite, setMyFavorite] = useState([]);
   const [sortByName, setSortByName] = useState("");
+  const [sortByBaseStats, setSortByBaseStats] = useState("");
 
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
@@ -40,13 +40,20 @@ function App() {
               `https://pokeapi.co/api/v2/pokemon/${id[id.length - 2]}`,
             );
             const result = await response.json();
+            let total = 0;
+            result.stats.map((a) => (total = total + a.base_stat));
             return result;
           }),
         ).then((result) => {
           const data = result
             .filter((a) => a.status === "fulfilled")
-            .map((a) => a.value);
-
+            .map((a) => ({
+              ...a.value,
+              base_stats: a.value.stats.reduce(
+                (accumulator, current) => accumulator + current.base_stat,
+                0,
+              ),
+            }));
           resolve(data);
           setIsLoading(false);
         });
@@ -96,7 +103,7 @@ function App() {
     if (isFilter !== "") {
       fetchingTypeFilterData();
     }
-    setSort("");
+    setSortById("");
     setSortByName("");
   }, [isFilter]);
 
@@ -107,12 +114,13 @@ function App() {
   useEffect(() => {
     fetchingTypeFilterList();
     onHandlePageAndSearch();
-  }, [mainList, sort]);
+  }, [mainList, sortById]);
 
   const onHandleBasicStructure = () => {
     setSearchTerm("");
     setIsFilter("");
     setTotalElementsPerPage(20);
+    setSortByBaseStats("");
   };
 
   const pokemonDataList = (page) => {
@@ -175,16 +183,32 @@ function App() {
     setPokemonCard([data]);
   };
 
-  const onHandleOrder = () => {
-    const isAscending = sort === "descending";
-    setMainList((prev) => [...prev].reverse());
-    setTypeFilterData((prev) => [...prev].reverse());
-    setSort(isAscending ? "descending" : "ascending");
+  const onHandleSortById = (event) => {
+    setSortById(event.target.value);
+    if (event.target.value === "ascending") {
+      setMainList(
+        mainList.sort(
+          (a, b) => a.url.split("/")[8 - 2] - b.url.split("/")[8 - 2],
+        ),
+      );
+      setTypeFilterData((prev) =>
+        [...prev].sort((a, b) => a.pokemon.name.localeCompare(b.pokemon.name)),
+      );
+    } else {
+      setMainList(
+        mainList.sort(
+          (a, b) => b.url.split("/")[8 - 2] - a.url.split("/")[8 - 2],
+        ),
+      );
+      setTypeFilterData((prev) =>
+        [...prev].sort((a, b) => b.pokemon.name.localeCompare(a.pokemon.name)),
+      );
+    }
   };
 
-  const onHandleOrderByName = () => {
-    const isAscending = sortByName === "z-a";
-    if (sortByName === "z-a") {
+  const onHandleOrderByName = (event) => {
+    setSortByName(event.target.value);
+    if (event.target.value === "a-z") {
       setMainList(mainList.sort((a, b) => a.name.localeCompare(b.name)));
       setTypeFilterData((prev) =>
         [...prev].sort((a, b) => a.pokemon.name.localeCompare(b.pokemon.name)),
@@ -195,7 +219,15 @@ function App() {
         [...prev].sort((a, b) => b.pokemon.name.localeCompare(a.pokemon.name)),
       );
     }
-    setSortByName(isAscending ? "a-z" : "z-a");
+  };
+
+  const onHandleSortByBaseStats = (event) => {
+    setSortByBaseStats(event.target.value);
+    if (event.target.value === "min") {
+      setDataList(dataList.sort((a, b) => a.base_stats - b.base_stats));
+    } else {
+      setDataList(dataList.sort((a, b) => b.base_stats - a.base_stats));
+    }
   };
 
   const onSetMyFavorite = (id, check) => {
@@ -223,11 +255,39 @@ function App() {
           setIsFilter={setIsFilter}
           typeFilterList={typeFilterList}
         />
-        <SortingByName
-          onHandleOrderByName={onHandleOrderByName}
-          sortByName={sortByName}
+        {/* Sort by Base Stats */}
+        <Sorting
+          name="sortByBaseStat"
+          value={sortByBaseStats}
+          onHandleChange={onHandleSortByBaseStats}
+          title="Sort By Base Stat"
+          firstOption="Minimum Base Stat"
+          firstOptionValue="min"
+          secondOption="Maximum Base Stat"
+          secondOptionValue="max"
         />
-        <SortingById onHandleOrder={onHandleOrder} sort={sort} />
+        {/* Sort By Name */}
+        <Sorting
+          name="sortByName"
+          value={sortByName}
+          onHandleChange={onHandleOrderByName}
+          title="Sort By Name"
+          firstOption="A-Z"
+          firstOptionValue="a-z"
+          secondOption="Z-A"
+          secondOptionValue="z-a"
+        />
+        {/* Sorting by Id */}
+        <Sorting
+          name="sortById"
+          value={sortById}
+          onHandleChange={onHandleSortById}
+          title="Sort By Id"
+          firstOption="Ascending Order"
+          firstOptionValue="ascending"
+          secondOption="Descending Order"
+          secondOptionValue="descending"
+        />
       </div>
 
       {/* Routes */}
@@ -273,7 +333,7 @@ function App() {
               searchTerm={searchTerm}
               localStorageKey={localStorageKey}
               setLocalStorageKey={setLocalStorageKey}
-              sort={sort}
+              sort={sortById}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
               onHandleBasicStructure={onHandleBasicStructure}

@@ -67,6 +67,12 @@ const PokemonListing = ({
         <div>
           {Array.isArray(dataList) && dataList.length > 0 && (
             <div>
+              {isLoading ? (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="loader" role="status" aria-label="Loading" />
+                  <span className="text-sm text-slate-500">Loading...</span>
+                </div>
+              ) : null}
               <CardDesign
                 searchDetails={dataList}
                 onSetPokemonDetails={onSetPokemonDetails}
