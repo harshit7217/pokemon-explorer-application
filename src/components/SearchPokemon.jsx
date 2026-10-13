@@ -1,7 +1,7 @@
-import { useDebounce, useDebouncedCallback } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 
 const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
-  const search = useDebouncedCallback(onClickSearch, 1000);
+  const search = useDebouncedCallback(onClickSearch, 200);
 
   return (
     <div>
@@ -69,8 +69,8 @@ const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
                   type="button"
                   aria-label="Clear search"
                   onClick={() => {
-                    search();
                     setSearchTerm("");
+                    onClickSearch(1, "noSearch");
                   }}
                   className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                 >

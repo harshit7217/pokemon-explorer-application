@@ -112,7 +112,6 @@ function App() {
   const onHandleBasicStructure = () => {
     setSearchTerm("");
     setIsFilter("");
-
     setTotalElementsPerPage(20);
   };
 
@@ -139,7 +138,7 @@ function App() {
     );
   };
 
-  const findingCurrentElements = (page) => {
+  const findingCurrentElements = (page, status) => {
     let arr;
     if (isFilter !== "") {
       if (searchTerm !== "") {
@@ -147,7 +146,7 @@ function App() {
       } else {
         arr = pokemonTypeFilterList(page);
       }
-    } else if (searchTerm === "") {
+    } else if (searchTerm === "" || status === "noSearch") {
       arr = pokemonDataList(page);
     } else {
       arr = pokemonSearchList(page);
@@ -155,9 +154,9 @@ function App() {
     return arr;
   };
 
-  const onHandlePageAndSearch = async (page = 1) => {
+  const onHandlePageAndSearch = async (page = 1, status) => {
     setCurrentPage(page);
-    const arr = findingCurrentElements(page);
+    const arr = findingCurrentElements(page, status);
     const temp = await fetchPokemonDetails(arr);
     setDataList(temp);
   };
