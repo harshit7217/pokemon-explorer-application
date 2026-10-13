@@ -248,8 +248,8 @@ function App() {
       />
 
       <Sidebar />
-
-      <div className="flex">
+      {/* Filter and Sorting */}
+      <div className="flex flex-nowrap items-center gap-4 overflow-x-auto border border-gray-200 bg-white p-4 shadow-sm pl-[70px] mt-[1px]">
         <TypeFilter
           isFilter={isFilter}
           setIsFilter={setIsFilter}
