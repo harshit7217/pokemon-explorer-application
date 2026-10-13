@@ -1,7 +1,4 @@
 const TypeFilter = ({ isFilter, setIsFilter, typeFilterList }) => {
-  const onHandleFilter = (e) => {
-    setIsFilter(e.target.value);
-  };
   return (
     <div className="w-full px-4 sm:pl-[70px] sm:pr-6">
       <div className="relative w-full sm:w-56">
@@ -9,7 +6,7 @@ const TypeFilter = ({ isFilter, setIsFilter, typeFilterList }) => {
           name="type"
           id="type"
           value={isFilter}
-          onChange={onHandleFilter}
+          onChange={(e) => setIsFilter(e.target.value)}
           className="w-full cursor-pointer appearance-none truncate rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-10 text-sm text-gray-900 shadow-sm transition hover:border-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
         >
           <option value="">no filter</option>
