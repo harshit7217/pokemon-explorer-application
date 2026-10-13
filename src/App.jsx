@@ -24,6 +24,24 @@ function App() {
   const [sortByName, setSortByName] = useState("");
   const [sortByBaseStats, setSortByBaseStats] = useState("");
 
+  const fetchPokemonList = async () => {
+    setIsLoading(true);
+    try {
+      const temp = await fetch("https://pokeapi.co/api/v2/pokemon-species");
+      const temp2 = await temp.json();
+      const count = temp2.count;
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-species?limit=${count}`,
+      );
+      const result = await response.json();
+      setMainList(result.results);
+    } catch (error) {
+      console.error("Error fetching Pokémon data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
     return new Promise((resolve, reject) => {
@@ -298,16 +316,14 @@ function App() {
           path="/"
           element={
             <PokemonListing
+              fetchPokemonList={fetchPokemonList}
               searchTerm={searchTerm}
               totalElementsPerPage={totalElementsPerPage}
               onHandlePageAndSearch={onHandlePageAndSearch}
-              setTotalElementsPerPage={setTotalElementsPerPage}
               currentPage={currentPage}
               searchList={searchList}
               mainList={mainList}
-              setIsLoading={setIsLoading}
               dataList={dataList}
-              setMainList={setMainList}
               isLoading={isLoading}
               onSetPokemonDetails={onSetPokemonDetails}
               pokemonCard={pokemonCard}
@@ -316,8 +332,6 @@ function App() {
               typeFilterData={typeFilterData}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
-              setIsFilter={setIsFilter}
-              setSearchTerm={setSearchTerm}
               onHandleBasicStructure={onHandleBasicStructure}
             />
           }

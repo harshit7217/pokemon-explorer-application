@@ -6,16 +6,14 @@ import PokemonCard from "./PokemonCard.jsx";
 import Button from "./Button.jsx";
 
 const PokemonListing = ({
+  fetchPokemonList,
   searchTerm,
   totalElementsPerPage,
   onHandlePageAndSearch,
-  setTotalElementsPerPage,
   currentPage,
   searchList,
   mainList,
-  setIsLoading,
   dataList,
-  setMainList,
   isLoading,
   onSetPokemonDetails,
   pokemonCard,
@@ -24,28 +22,8 @@ const PokemonListing = ({
   typeFilterData,
   myFavorite,
   onSetMyFavorite,
-  setIsFilter,
-  setSearchTerm,
   onHandleBasicStructure,
 }) => {
-  const fetchPokemonList = async () => {
-    setIsLoading(true);
-    try {
-      const temp = await fetch("https://pokeapi.co/api/v2/pokemon-species");
-      const temp2 = await temp.json();
-      const count = temp2.count;
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon-species?limit=${count}`,
-      );
-      const result = await response.json();
-      setMainList(result.results);
-    } catch (error) {
-      console.error("Error fetching Pokémon data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchPokemonList();
     onHandleBasicStructure();
