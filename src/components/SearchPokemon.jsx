@@ -1,8 +1,9 @@
-import { useDebouncedCallback } from "use-debounce";
-
-const SearchPokemon = ({ searchTerm, setSearchTerm, onClickSearch }) => {
-  const search = useDebouncedCallback(onClickSearch, 200);
-
+const SearchPokemon = ({
+  searchTerm,
+  setSearchTerm,
+  onClickSearch,
+  search,
+}) => {
   return (
     <div>
       <div className="border-b border-slate-200 bg-white shadow-sm pl-[70px]">
