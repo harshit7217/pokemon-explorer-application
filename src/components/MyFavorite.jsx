@@ -2,6 +2,7 @@ import CardDesign from "./CardDesign";
 import Button from "./Button";
 import PokemonCard from "./PokemonCard";
 import { useEffect, useState } from "react";
+import NotFound from "./NotFound";
 
 const MyFavorite = ({
   onSetPokemonDetails,
@@ -60,6 +61,8 @@ const MyFavorite = ({
             onSetPokemonDetails={onSetPokemonDetails}
           />
         </div>
+      ) : data.length === 0 ? (
+        <NotFound />
       ) : (
         <CardDesign
           searchDetails={data}
