@@ -14,6 +14,7 @@ const MyFavorite = ({
   myFavorite,
   onSetMyFavorite,
   sort,
+  onHandleBasicStructure,
 }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -50,6 +51,10 @@ const MyFavorite = ({
           : items;
     setData(temp);
   }, [myFavorite, sort, typeFilterData, searchTerm]);
+
+  useEffect(() => {
+    onHandleBasicStructure();
+  }, []);
 
   return (
     <div className="pl-[70px]">

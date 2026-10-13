@@ -5,7 +5,8 @@ import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
-import SortingById from "./components/Sorting.jsx";
+import SortingById from "./components/SortingById.jsx";
+import SortingByName from "./components/SortingByName.jsx";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -18,11 +19,12 @@ function App() {
   const [isFilter, setIsFilter] = useState("");
   const [typeFilterList, setTypeFilterList] = useState([]);
   const [typeFilterData, setTypeFilterData] = useState([]);
-  const [sort, setSort] = useState("ascending");
+  const [sort, setSort] = useState("");
   const [localStorageKey, setLocalStorageKey] = useState(
     Object.keys(localStorage),
   );
   const [myFavorite, setMyFavorite] = useState([]);
+  const [sortByName, setSortByName] = useState("");
 
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
@@ -94,7 +96,8 @@ function App() {
     if (isFilter !== "") {
       fetchingTypeFilterData();
     }
-    setSort("ascending");
+    setSort("");
+    setSortByName("");
   }, [isFilter]);
 
   useEffect(() => {
@@ -105,6 +108,13 @@ function App() {
     fetchingTypeFilterList();
     onHandlePageAndSearch();
   }, [mainList, sort]);
+
+  const onHandleBasicStructure = () => {
+    setSearchTerm("");
+    setIsFilter("");
+
+    setTotalElementsPerPage(20);
+  };
 
   const pokemonDataList = (page) => {
     return mainList.slice(
@@ -167,10 +177,26 @@ function App() {
   };
 
   const onHandleOrder = () => {
-    const isAscending = sort === "ascending";
+    const isAscending = sort === "descending";
     setMainList((prev) => [...prev].reverse());
     setTypeFilterData((prev) => [...prev].reverse());
     setSort(isAscending ? "descending" : "ascending");
+  };
+
+  const onHandleOrderByName = () => {
+    const isAscending = sortByName === "z-a";
+    if (sortByName === "z-a") {
+      setMainList(mainList.sort((a, b) => a.name.localeCompare(b.name)));
+      setTypeFilterData((prev) =>
+        [...prev].sort((a, b) => a.pokemon.name.localeCompare(b.pokemon.name)),
+      );
+    } else {
+      setMainList(mainList.sort((a, b) => b.name.localeCompare(a.name)));
+      setTypeFilterData((prev) =>
+        [...prev].sort((a, b) => b.pokemon.name.localeCompare(a.pokemon.name)),
+      );
+    }
+    setSortByName(isAscending ? "a-z" : "z-a");
   };
 
   const onSetMyFavorite = (id, check) => {
@@ -197,6 +223,10 @@ function App() {
           isFilter={isFilter}
           setIsFilter={setIsFilter}
           typeFilterList={typeFilterList}
+        />
+        <SortingByName
+          onHandleOrderByName={onHandleOrderByName}
+          sortByName={sortByName}
         />
         <SortingById onHandleOrder={onHandleOrder} sort={sort} />
       </div>
@@ -225,6 +255,9 @@ function App() {
               typeFilterData={typeFilterData}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
+              setIsFilter={setIsFilter}
+              setSearchTerm={setSearchTerm}
+              onHandleBasicStructure={onHandleBasicStructure}
             />
           }
         />
@@ -244,6 +277,7 @@ function App() {
               sort={sort}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
+              onHandleBasicStructure={onHandleBasicStructure}
             />
           }
         />

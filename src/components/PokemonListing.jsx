@@ -24,6 +24,9 @@ const PokemonListing = ({
   typeFilterData,
   myFavorite,
   onSetMyFavorite,
+  setIsFilter,
+  setSearchTerm,
+  onHandleBasicStructure,
 }) => {
   const fetchPokemonList = async () => {
     setIsLoading(true);
@@ -45,7 +48,7 @@ const PokemonListing = ({
 
   useEffect(() => {
     fetchPokemonList();
-    setTotalElementsPerPage(20);
+    onHandleBasicStructure();
   }, []);
 
   return (
