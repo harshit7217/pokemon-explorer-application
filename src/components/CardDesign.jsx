@@ -1,6 +1,11 @@
 import FavoriteToggleButton from "./FavoriteToggleButton";
 
-const CardDesign = ({ searchDetails, onSetPokemonDetails }) => {
+const CardDesign = ({
+  searchDetails,
+  onSetPokemonDetails,
+  myFavorite,
+  onSetMyFavorite,
+}) => {
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {searchDetails.map((pokemon) => (
@@ -16,7 +21,11 @@ const CardDesign = ({ searchDetails, onSetPokemonDetails }) => {
               <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-slate-500 shadow-sm backdrop-blur">
                 #{String(pokemon.id).padStart(3, "0")}
               </span>
-              <FavoriteToggleButton pokemon={pokemon} />
+              <FavoriteToggleButton
+                pokemon={pokemon}
+                myFavorite={myFavorite}
+                onSetMyFavorite={onSetMyFavorite}
+              />
             </div>
             {/* Pokémon image */}
             <div className="mt-3 flex justify-center">

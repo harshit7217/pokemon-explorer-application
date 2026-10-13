@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
@@ -22,6 +22,8 @@ const PokemonListing = ({
   setPokemonCard,
   isFilter,
   typeFilterData,
+  myFavorite,
+  onSetMyFavorite,
 }) => {
   const fetchPokemonList = async () => {
     setIsLoading(true);
@@ -65,6 +67,8 @@ const PokemonListing = ({
               <CardDesign
                 searchDetails={dataList}
                 onSetPokemonDetails={onSetPokemonDetails}
+                myFavorite={myFavorite}
+                onSetMyFavorite={onSetMyFavorite}
               />
               {isLoading ? (
                 <div className="flex flex-col items-center gap-3">

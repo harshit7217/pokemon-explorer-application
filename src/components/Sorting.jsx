@@ -1,12 +1,7 @@
-const SortingById = ({ onHandleOrder, sortId }) => {
+const SortingById = ({ onHandleOrder, sort }) => {
   return (
     <div>
-      <select
-        name="sort-id"
-        id="sort-id"
-        value={sortId}
-        onChange={onHandleOrder}
-      >
+      <select name="sorting" id="sorting" value={sort} onChange={onHandleOrder}>
         <option value="ascending">Ascending Order</option>
         <option value="descending">Descending Order</option>
       </select>

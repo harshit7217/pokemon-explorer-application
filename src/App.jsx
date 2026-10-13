@@ -5,7 +5,7 @@ import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
-import SortingById from "./components/SortingById.jsx";
+import SortingById from "./components/Sorting.jsx";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -18,10 +18,11 @@ function App() {
   const [isFilter, setIsFilter] = useState("");
   const [typeFilterList, setTypeFilterList] = useState([]);
   const [typeFilterData, setTypeFilterData] = useState([]);
-  const [sortId, setSortId] = useState("ascending");
+  const [sort, setSort] = useState("ascending");
   const [localStorageKey, setLocalStorageKey] = useState(
-    Object.keys(localStorage).sort((a, b) => a - b),
+    Object.keys(localStorage),
   );
+  const [myFavorite, setMyFavorite] = useState([]);
 
   const fetchPokemonDetails = async (arr) => {
     setIsLoading(true);
@@ -93,6 +94,7 @@ function App() {
     if (isFilter !== "") {
       fetchingTypeFilterData();
     }
+    setSort("ascending");
   }, [isFilter]);
 
   useEffect(() => {
@@ -102,7 +104,7 @@ function App() {
   useEffect(() => {
     fetchingTypeFilterList();
     onHandlePageAndSearch();
-  }, [mainList, sortId]);
+  }, [mainList, sort]);
 
   const pokemonDataList = (page) => {
     return mainList.slice(
@@ -165,16 +167,17 @@ function App() {
   };
 
   const onHandleOrder = () => {
-    if (sortId !== "ascending") {
-      setMainList(mainList.reverse());
-      setTypeFilterData(typeFilterData.reverse());
-      setLocalStorageKey(localStorageKey.sort((a, b) => a - b));
-      setSortId("ascending");
-    } else if (sortId !== "descending") {
-      setMainList(mainList.reverse());
-      setTypeFilterData(typeFilterData.reverse());
-      setLocalStorageKey(localStorageKey.sort((a, b) => b - a));
-      setSortId("descending");
+    const isAscending = sort === "ascending";
+    setMainList((prev) => [...prev].reverse());
+    setTypeFilterData((prev) => [...prev].reverse());
+    setSort(isAscending ? "descending" : "ascending");
+  };
+
+  const onSetMyFavorite = (id, check) => {
+    if (check) {
+      setMyFavorite({ id: id, status: true });
+    } else {
+      setMyFavorite({ ...myFavorite, status: false });
     }
   };
 
@@ -195,7 +198,7 @@ function App() {
           setIsFilter={setIsFilter}
           typeFilterList={typeFilterList}
         />
-        <SortingById onHandleOrder={onHandleOrder} sortId={sortId} />
+        <SortingById onHandleOrder={onHandleOrder} sort={sort} />
       </div>
 
       {/* Routes */}
@@ -220,6 +223,8 @@ function App() {
               setPokemonCard={setPokemonCard}
               isFilter={isFilter}
               typeFilterData={typeFilterData}
+              myFavorite={myFavorite}
+              onSetMyFavorite={onSetMyFavorite}
             />
           }
         />
@@ -235,6 +240,10 @@ function App() {
               isFilter={isFilter}
               searchTerm={searchTerm}
               localStorageKey={localStorageKey}
+              setLocalStorageKey={setLocalStorageKey}
+              sort={sort}
+              myFavorite={myFavorite}
+              onSetMyFavorite={onSetMyFavorite}
             />
           }
         />
