@@ -6,6 +6,7 @@ import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
 import Sorting from "./components/Sorting.jsx";
+import { useDebouncedCallback } from "use-debounce";
 
 function App() {
   const [mainList, setMainList] = useState([]);
@@ -19,9 +20,6 @@ function App() {
   const [typeFilterList, setTypeFilterList] = useState([]);
   const [typeFilterData, setTypeFilterData] = useState([]);
   const [sortById, setSortById] = useState("");
-  const [localStorageKey, setLocalStorageKey] = useState(
-    Object.keys(localStorage),
-  );
   const [myFavorite, setMyFavorite] = useState([]);
   const [sortByName, setSortByName] = useState("");
   const [sortByBaseStats, setSortByBaseStats] = useState("");
@@ -105,6 +103,7 @@ function App() {
     }
     setSortById("");
     setSortByName("");
+    setSortByBaseStats("");
   }, [isFilter]);
 
   useEffect(() => {
@@ -114,7 +113,7 @@ function App() {
   useEffect(() => {
     fetchingTypeFilterList();
     onHandlePageAndSearch();
-  }, [mainList, sortById]);
+  }, [mainList]);
 
   const onHandleBasicStructure = () => {
     setSearchTerm("");
@@ -168,6 +167,8 @@ function App() {
     const temp = await fetchPokemonDetails(arr);
     setDataList(temp);
   };
+
+  const search = useDebouncedCallback(onHandlePageAndSearch, 200);
 
   const searchList = () => {
     const searchIncludingElements =
@@ -245,6 +246,7 @@ function App() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         onClickSearch={onHandlePageAndSearch}
+        search={search}
       />
 
       <Sidebar />
@@ -331,8 +333,6 @@ function App() {
               typeFilterData={typeFilterData}
               isFilter={isFilter}
               searchTerm={searchTerm}
-              localStorageKey={localStorageKey}
-              setLocalStorageKey={setLocalStorageKey}
               sort={sortById}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
