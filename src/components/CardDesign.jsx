@@ -1,4 +1,6 @@
 import FavoriteToggleButton from "./FavoriteToggleButton";
+import TruncateMarkup from "react-truncate-markup";
+import PokemonCard from "./PokemonCard";
 
 const CardDesign = ({
   searchDetails,
