@@ -16,11 +16,11 @@ const Paging = ({ onHandlePage }) => {
   const totalPage =
     isFilter !== ""
       ? searchTerm !== ""
-        ? Math.ceil(searchList.length / totalElementsPerPage)
+        ? Math.ceil(searchList().length / totalElementsPerPage)
         : Math.ceil(typeFilterData.length / totalElementsPerPage)
       : searchTerm === ""
         ? Math.ceil(mainList.length / totalElementsPerPage)
-        : Math.ceil(searchList.length / totalElementsPerPage);
+        : Math.ceil(searchList().length / totalElementsPerPage);
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-3 my-4 mx-auto w-fit p-3 rounded-2xl bg-white/80">

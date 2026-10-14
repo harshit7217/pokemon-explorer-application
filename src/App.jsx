@@ -10,12 +10,11 @@ import { useDebouncedCallback } from "use-debounce";
 import { PokemonCardContext } from "./components/context/PokemonCardContext.jsx";
 
 function App() {
-  const totalElementsPerPage = 12;
+  const totalElementsPerPage = 20;
 
   const [mainList, setMainList] = useState([]);
   const [dataList, setDataList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchList, setSearchList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonCard, setPokemonCard] = useState([]);
@@ -124,7 +123,7 @@ function App() {
   };
 
   const pokemonSearchList = (page) => {
-    const searchIncludingElements = onHandleSearchList();
+    const searchIncludingElements = searchList();
 
     return searchIncludingElements.slice(
       (page - 1) * totalElementsPerPage,
@@ -132,14 +131,13 @@ function App() {
     );
   };
 
-  const onHandleSearchList = () => {
+  const searchList = () => {
     const searchIncludingElements =
       isFilter !== ""
         ? typeFilterData.filter((val) =>
             val.pokemon.name.includes(searchTerm.toLowerCase()),
           )
         : mainList.filter((val) => val.name.includes(searchTerm.toLowerCase()));
-    setSearchList(searchIncludingElements);
     return searchIncludingElements;
   };
 
@@ -402,7 +400,6 @@ function App() {
               <PokemonListing
                 fetchPokemonList={fetchPokemonList}
                 onHandlePageAndSearch={onHandlePageAndSearch}
-                searchList={searchList}
                 onSetPokemonDetails={onSetPokemonDetails}
                 setPokemonCard={setPokemonCard}
                 onSetMyFavorite={onSetMyFavorite}
