@@ -7,6 +7,7 @@ import Sidebar from "./components/SideBar.jsx";
 import TypeFilter from "./components/TypeFilter.jsx";
 import Sorting from "./components/Sorting.jsx";
 import { useDebouncedCallback } from "use-debounce";
+import { PokemonCardContext } from "./components/context/PokemonCardContext.jsx";
 
 function App() {
   const totalElementsPerPage = 12;
@@ -14,6 +15,7 @@ function App() {
   const [mainList, setMainList] = useState([]);
   const [dataList, setDataList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchList, setSearchList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonCard, setPokemonCard] = useState([]);
@@ -122,7 +124,7 @@ function App() {
   };
 
   const pokemonSearchList = (page) => {
-    const searchIncludingElements = searchList();
+    const searchIncludingElements = onHandleSearchList();
 
     return searchIncludingElements.slice(
       (page - 1) * totalElementsPerPage,
@@ -130,13 +132,14 @@ function App() {
     );
   };
 
-  const searchList = () => {
+  const onHandleSearchList = () => {
     const searchIncludingElements =
       isFilter !== ""
         ? typeFilterData.filter((val) =>
             val.pokemon.name.includes(searchTerm.toLowerCase()),
           )
         : mainList.filter((val) => val.name.includes(searchTerm.toLowerCase()));
+    setSearchList(searchIncludingElements);
     return searchIncludingElements;
   };
 
@@ -251,7 +254,7 @@ function App() {
     });
 
     const searchItems =
-      filterItems.length === 0
+      filterItems.length !== 0
         ? items.filter((item) => {
             return item.name.includes(searchTerm);
           })
@@ -381,39 +384,50 @@ function App() {
         <Route
           path="/"
           element={
-            <PokemonListing
-              fetchPokemonList={fetchPokemonList}
-              searchTerm={searchTerm}
-              totalElementsPerPage={totalElementsPerPage}
-              onHandlePageAndSearch={onHandlePageAndSearch}
-              currentPage={currentPage}
-              searchList={searchList}
-              mainList={mainList}
-              dataList={dataList}
-              isLoading={isLoading}
-              onSetPokemonDetails={onSetPokemonDetails}
-              pokemonCard={pokemonCard}
-              setPokemonCard={setPokemonCard}
-              isFilter={isFilter}
-              typeFilterData={typeFilterData}
-              myFavorite={myFavorite}
-              onSetMyFavorite={onSetMyFavorite}
-              onHandleBasicStructure={onHandleBasicStructure}
-            />
+            <PokemonCardContext
+              value={{
+                pokemonCard: pokemonCard,
+                searchTerm: searchTerm,
+                totalElementsPerPage: totalElementsPerPage,
+                currentPage: currentPage,
+                mainList: mainList,
+                dataList: dataList,
+                searchList: searchList,
+                isLoading: isLoading,
+                isFilter: isFilter,
+                typeFilterData: typeFilterData,
+                myFavorite: myFavorite,
+              }}
+            >
+              <PokemonListing
+                fetchPokemonList={fetchPokemonList}
+                onHandlePageAndSearch={onHandlePageAndSearch}
+                searchList={searchList}
+                onSetPokemonDetails={onSetPokemonDetails}
+                setPokemonCard={setPokemonCard}
+                onSetMyFavorite={onSetMyFavorite}
+                onHandleBasicStructure={onHandleBasicStructure}
+              />
+            </PokemonCardContext>
           }
         />
         <Route
           path="/my-favorite"
           element={
-            <MyFavorite
-              onSetPokemonDetails={onSetPokemonDetails}
-              pokemonCard={pokemonCard}
-              setPokemonCard={setPokemonCard}
-              myFavorite={myFavorite}
-              onSetMyFavorite={onSetMyFavorite}
-              onHandleBasicStructure={onHandleBasicStructure}
-              localData={localData}
-            />
+            <PokemonCardContext
+              value={{
+                pokemonCard: pokemonCard,
+                myFavorite: myFavorite,
+                localData: localData,
+              }}
+            >
+              <MyFavorite
+                onSetPokemonDetails={onSetPokemonDetails}
+                setPokemonCard={setPokemonCard}
+                onSetMyFavorite={onSetMyFavorite}
+                onHandleBasicStructure={onHandleBasicStructure}
+              />
+            </PokemonCardContext>
           }
         />
       </Routes>

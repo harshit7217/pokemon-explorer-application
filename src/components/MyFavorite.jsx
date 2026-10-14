@@ -1,17 +1,18 @@
 import CardDesign from "./CardDesign";
 import PokemonCard from "./PokemonCard";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import NotFound from "./NotFound";
+import { PokemonCardContext } from "./context/PokemonCardContext";
 
 const MyFavorite = ({
   onSetPokemonDetails,
-  pokemonCard,
   setPokemonCard,
-  myFavorite,
   onSetMyFavorite,
   onHandleBasicStructure,
-  localData,
 }) => {
+  const useContextData = useContext(PokemonCardContext);
+  const pokemonCard = useContextData.pokemonCard;
+  const localData = useContextData.localData;
   useEffect(() => {
     onHandleBasicStructure();
   }, []);
@@ -21,7 +22,6 @@ const MyFavorite = ({
       {pokemonCard?.length === 1 ? (
         <div className="w-full min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
           <PokemonCard
-            pokemon={pokemonCard[0]}
             onSetMyFavorite={onSetMyFavorite}
             setPokemonCard={setPokemonCard}
           />
@@ -35,7 +35,6 @@ const MyFavorite = ({
           <CardDesign
             searchDetails={localData}
             onSetPokemonDetails={onSetPokemonDetails}
-            myFavorite={myFavorite}
             onSetMyFavorite={onSetMyFavorite}
           />
         </div>

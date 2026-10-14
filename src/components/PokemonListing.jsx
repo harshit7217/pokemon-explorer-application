@@ -1,28 +1,24 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
 import PokemonCard from "./PokemonCard.jsx";
+import { PokemonCardContext } from "./context/PokemonCardContext.jsx";
 
 const PokemonListing = ({
   fetchPokemonList,
-  searchTerm,
-  totalElementsPerPage,
   onHandlePageAndSearch,
-  currentPage,
-  searchList,
-  mainList,
-  dataList,
-  isLoading,
   onSetPokemonDetails,
-  pokemonCard,
   setPokemonCard,
-  isFilter,
-  typeFilterData,
-  myFavorite,
   onSetMyFavorite,
   onHandleBasicStructure,
 }) => {
+  const useContextData = useContext(PokemonCardContext);
+  const pokemonCard = useContextData.pokemonCard;
+  const searchTerm = useContextData.searchTerm;
+  const dataList = useContextData.dataList;
+  const isLoading = useContextData.isLoading;
+
   useEffect(() => {
     fetchPokemonList();
     onHandleBasicStructure();
@@ -35,10 +31,8 @@ const PokemonListing = ({
       ) : pokemonCard.length === 1 ? (
         <div className="relative z-[1] w-full px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
           <PokemonCard
-            pokemon={pokemonCard[0]}
             onSetMyFavorite={onSetMyFavorite}
             setPokemonCard={setPokemonCard}
-            className="relative z-[1]"
           />
         </div>
       ) : (
@@ -52,14 +46,11 @@ const PokemonListing = ({
                 </div>
               ) : null}
 
-              <div className="w-full min-w-0">
-                <CardDesign
-                  searchDetails={dataList}
-                  onSetPokemonDetails={onSetPokemonDetails}
-                  myFavorite={myFavorite}
-                  onSetMyFavorite={onSetMyFavorite}
-                />
-              </div>
+              <CardDesign
+                searchDetails={dataList}
+                onSetPokemonDetails={onSetPokemonDetails}
+                onSetMyFavorite={onSetMyFavorite}
+              />
 
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-6 sm:py-8">
@@ -72,19 +63,7 @@ const PokemonListing = ({
 
           {/* Paging System */}
           <div className="mt-5 w-full min-w-0 pb-24 sm:mt-6 sm:pb-6">
-            <Paging
-              currentPage={currentPage}
-              totalPage={
-                isFilter !== ""
-                  ? searchTerm !== ""
-                    ? Math.ceil(searchList().length / totalElementsPerPage)
-                    : Math.ceil(typeFilterData.length / totalElementsPerPage)
-                  : searchTerm === ""
-                    ? Math.ceil(mainList.length / totalElementsPerPage)
-                    : Math.ceil(searchList().length / totalElementsPerPage)
-              }
-              onHandlePage={onHandlePageAndSearch}
-            />
+            <Paging onHandlePage={onHandlePageAndSearch} />
           </div>
         </div>
       )}

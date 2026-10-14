@@ -1,9 +1,7 @@
-// Usage: <PokemonCard pokemon={pokemonDetail[0]} />
-// Requires Tailwind CSS. Class names are written out in full (not built from
-// strings) so Tailwind's compiler can detect them.
-
 import FavoriteToggleButton from "./FavoriteToggleButton";
 import Button from "./Button.jsx";
+import { useContext } from "react";
+import { PokemonCardContext } from "./context/PokemonCardContext.jsx";
 
 const TYPE_STYLES = {
   normal: "bg-stone-400 text-white",
@@ -49,11 +47,8 @@ const SectionTitle = ({ children }) => (
   </h3>
 );
 
-export default function PokemonCard({
-  pokemon,
-  onSetMyFavorite,
-  setPokemonCard,
-}) {
+export default function PokemonCard({ onSetMyFavorite, setPokemonCard }) {
+  const pokemon = useContext(PokemonCardContext).pokemonCard[0];
   if (!pokemon) return null;
   const { name, id, sprites, types, height, weight, abilities, stats, moves } =
     pokemon;

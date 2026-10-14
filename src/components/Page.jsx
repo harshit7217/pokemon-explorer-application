@@ -1,7 +1,12 @@
-import Button from "./Button";
+import { useContext } from "react";
 import PageButton from "./PageButton";
+import { PokemonCardContext } from "./context/PokemonCardContext";
 
-const Page = ({ currentPage, totalPage, onHandlePage }) => {
+const Page = ({ totalPage, onHandlePage }) => {
+  const useContextData = useContext(PokemonCardContext);
+  const currentPage = useContextData.currentPage;
+  // console.log(currentPage);
+
   const array = Array.from({ length: totalPage }, (_, i) => {
     const page = i + 1;
     const isActive = page === currentPage;

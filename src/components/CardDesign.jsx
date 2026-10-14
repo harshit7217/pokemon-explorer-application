@@ -1,11 +1,8 @@
 import FavoriteToggleButton from "./FavoriteToggleButton";
-import TruncateMarkup from "react-truncate-markup";
-import PokemonCard from "./PokemonCard";
 
 const CardDesign = ({
   searchDetails,
   onSetPokemonDetails,
-  myFavorite,
   onSetMyFavorite,
 }) => {
   return (
@@ -25,7 +22,6 @@ const CardDesign = ({
               </span>
               <FavoriteToggleButton
                 pokemon={pokemon}
-                myFavorite={myFavorite}
                 onSetMyFavorite={onSetMyFavorite}
               />
             </div>
