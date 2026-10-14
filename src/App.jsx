@@ -141,6 +141,7 @@ function App() {
     setSortByName("");
     setSortById("");
     setPokemonCard([]);
+    setCurrentPage(1);
   };
 
   const pokemonDataList = (page) => {
@@ -298,20 +299,21 @@ function App() {
         : searchTerm !== ""
           ? searchItems
           : items;
-    onHandleLocalStorageSort(temp);
+    const data = onHandleLocalStorageSort(temp);
+    setLocalData(data);
   };
 
   const onHandleLocalStorageSort = (temp) => {
     if (sortById === "ascending") {
-      setLocalData(temp.sort((a, b) => a.id - b.id));
+      return temp.sort((a, b) => a.id - b.id);
     } else if (sortById === "descending") {
-      setLocalData(temp.sort((a, b) => b.id - a.id));
+      return temp.sort((a, b) => b.id - a.id);
     } else if (sortByName === "a-z") {
-      setLocalData(temp.sort((a, b) => a.name.localeCompare(b.name)));
+      return temp.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortByName === "z-a") {
-      setLocalData(temp.sort((a, b) => b.name.localeCompare(a.name)));
+      return temp.sort((a, b) => b.name.localeCompare(a.name));
     } else {
-      setLocalData(temp);
+      return temp;
     }
   };
 

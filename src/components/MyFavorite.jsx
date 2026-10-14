@@ -29,12 +29,14 @@ const MyFavorite = ({
       ) : localData.length === 0 ? (
         <NotFound />
       ) : (
-        <CardDesign
-          searchDetails={localData}
-          onSetPokemonDetails={onSetPokemonDetails}
-          myFavorite={myFavorite}
-          onSetMyFavorite={onSetMyFavorite}
-        />
+        <div>
+          <CardDesign
+            searchDetails={localData}
+            onSetPokemonDetails={onSetPokemonDetails}
+            myFavorite={myFavorite}
+            onSetMyFavorite={onSetMyFavorite}
+          />
+        </div>
       )}
     </div>
   );
