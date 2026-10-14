@@ -1,7 +1,7 @@
 import CardDesign from "./CardDesign";
 import Button from "./Button";
 import PokemonCard from "./PokemonCard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NotFound from "./NotFound";
 
 const MyFavorite = ({

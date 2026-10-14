@@ -1,6 +1,6 @@
 import PokemonListing from "./components/PokemonListing";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, data } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MyFavorite from "./components/MyFavorite";
 import SearchPokemon from "./components/SearchPokemon";
 import Sidebar from "./components/SideBar.jsx";
@@ -9,10 +9,10 @@ import Sorting from "./components/Sorting.jsx";
 import { useDebouncedCallback } from "use-debounce";
 
 function App() {
+  const totalElementsPerPage = 20;
   const [mainList, setMainList] = useState([]);
   const [dataList, setDataList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [totalElementsPerPage, setTotalElementsPerPage] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonCard, setPokemonCard] = useState([]);
@@ -137,7 +137,6 @@ function App() {
   const onHandleBasicStructure = () => {
     setSearchTerm("");
     setIsFilter("");
-    setTotalElementsPerPage(20);
     setSortByBaseStats("");
     setSortByName("");
     setSortById("");
