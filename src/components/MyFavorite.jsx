@@ -17,9 +17,9 @@ const MyFavorite = ({
   }, []);
 
   return (
-    <div className="pl-[70px]">
+    <div className="min-h-screen w-full min-w-0 pb-20 sm:pb-6 sm:pl-16 lg:pl-[70px]">
       {pokemonCard?.length === 1 ? (
-        <div>
+        <div className="w-full min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
           <PokemonCard
             pokemon={pokemonCard[0]}
             onSetMyFavorite={onSetMyFavorite}
@@ -27,9 +27,11 @@ const MyFavorite = ({
           />
         </div>
       ) : localData.length === 0 ? (
-        <NotFound />
+        <div className="w-full min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
+          <NotFound />
+        </div>
       ) : (
-        <div>
+        <div className="w-full min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
           <CardDesign
             searchDetails={localData}
             onSetPokemonDetails={onSetPokemonDetails}
