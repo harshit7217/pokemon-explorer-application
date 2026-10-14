@@ -3,7 +3,6 @@ import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
 import PokemonCard from "./PokemonCard.jsx";
-import Button from "./Button.jsx";
 
 const PokemonListing = ({
   fetchPokemonList,
@@ -35,10 +34,10 @@ const PokemonListing = ({
         <NotFound />
       ) : pokemonCard.length === 1 ? (
         <div>
-          <Button title={"Back"} onClick={() => setPokemonCard([])} />
           <PokemonCard
             pokemon={pokemonCard[0]}
-            onSetPokemonDetails={onSetPokemonDetails}
+            onSetMyFavorite={onSetMyFavorite}
+            setPokemonCard={setPokemonCard}
           />
         </div>
       ) : (

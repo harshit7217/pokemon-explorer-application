@@ -3,6 +3,7 @@
 // strings) so Tailwind's compiler can detect them.
 
 import FavoriteToggleButton from "./FavoriteToggleButton";
+import Button from "./Button.jsx";
 
 const TYPE_STYLES = {
   normal: "bg-stone-400 text-white",
@@ -48,7 +49,11 @@ const SectionTitle = ({ children }) => (
   </h3>
 );
 
-export default function PokemonCard({ pokemon }) {
+export default function PokemonCard({
+  pokemon,
+  onSetMyFavorite,
+  setPokemonCard,
+}) {
   if (!pokemon) return null;
   const { name, id, sprites, types, height, weight, abilities, stats, moves } =
     pokemon;
@@ -64,7 +69,23 @@ export default function PokemonCard({ pokemon }) {
         <span className="absolute left-5 top-5 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold backdrop-blur">
           #{String(id).padStart(3, "0")}
         </span>
-        <FavoriteToggleButton pokemon={pokemon} />
+
+        <span className="absolute right-4 top-4 z-10">
+          <Button
+            title="×"
+            onClick={() => setPokemonCard([])}
+            className="flex h-8 w-8 items-center justify-center rounded-full
+               border border-gray-200 bg-white text-gray-500
+               shadow-sm transition-all duration-200
+               hover:rotate-90 hover:border-red-200
+               hover:bg-red-50 hover:text-red-500
+               focus:outline-none focus:ring-2 focus:ring-red-300"
+          />
+        </span>
+        <FavoriteToggleButton
+          pokemon={pokemon}
+          onSetMyFavorite={onSetMyFavorite}
+        />
 
         <div className="rounded-full bg-white/90 p-3 shadow-lg ring-4 ring-white/40">
           <img

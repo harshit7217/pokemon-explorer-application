@@ -320,56 +320,59 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* Navigation */}
-      <SearchPokemon
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onClickSearch={onHandlePageAndSearch}
-        search={search}
-      />
-
       <Sidebar />
-      {/* Filter and Sorting */}
-      <div className="flex flex-nowrap items-center gap-4 overflow-x-auto border border-gray-200 bg-white p-4 shadow-sm pl-[70px] mt-[1px]">
-        <TypeFilter
-          isFilter={isFilter}
-          setIsFilter={setIsFilter}
-          typeFilterList={typeFilterList}
-        />
-        {/* Sort by Base Stats */}
-        <Sorting
-          name="sortByBaseStat"
-          value={sortByBaseStats}
-          onHandleChange={onHandleSortByBaseStats}
-          title="Sort By Base Stat"
-          firstOption="Minimum Base Stat"
-          firstOptionValue="min"
-          secondOption="Maximum Base Stat"
-          secondOptionValue="max"
-        />
-        {/* Sort By Name */}
-        <Sorting
-          name="sortByName"
-          value={sortByName}
-          onHandleChange={onHandleOrderByName}
-          title="Sort By Name"
-          firstOption="A-Z"
-          firstOptionValue="a-z"
-          secondOption="Z-A"
-          secondOptionValue="z-a"
-        />
-        {/* Sorting by Id */}
-        <Sorting
-          name="sortById"
-          value={sortById}
-          onHandleChange={onHandleSortById}
-          title="Sort By Id"
-          firstOption="Ascending Order"
-          firstOptionValue="ascending"
-          secondOption="Descending Order"
-          secondOptionValue="descending"
-        />
-      </div>
+      {pokemonCard.length === 1 ? null : (
+        <div>
+          {/* Navigation */}
+          <SearchPokemon
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onClickSearch={onHandlePageAndSearch}
+            search={search}
+          />
+          {/* Filter and Sorting */}
+          <div className="flex flex-nowrap items-center gap-4 overflow-x-auto border border-gray-200 bg-white p-4 shadow-sm pl-[70px] mt-[1px]">
+            <TypeFilter
+              isFilter={isFilter}
+              setIsFilter={setIsFilter}
+              typeFilterList={typeFilterList}
+            />
+            {/* Sort by Base Stats */}
+            <Sorting
+              name="sortByBaseStat"
+              value={sortByBaseStats}
+              onHandleChange={onHandleSortByBaseStats}
+              title="Sort By Base Stat"
+              firstOption="Minimum Base Stat"
+              firstOptionValue="min"
+              secondOption="Maximum Base Stat"
+              secondOptionValue="max"
+            />
+            {/* Sort By Name */}
+            <Sorting
+              name="sortByName"
+              value={sortByName}
+              onHandleChange={onHandleOrderByName}
+              title="Sort By Name"
+              firstOption="A-Z"
+              firstOptionValue="a-z"
+              secondOption="Z-A"
+              secondOptionValue="z-a"
+            />
+            {/* Sorting by Id */}
+            <Sorting
+              name="sortById"
+              value={sortById}
+              onHandleChange={onHandleSortById}
+              title="Sort By Id"
+              firstOption="Ascending Order"
+              firstOptionValue="ascending"
+              secondOption="Descending Order"
+              secondOptionValue="descending"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Routes */}
       <Routes>

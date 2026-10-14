@@ -13,7 +13,7 @@ const CardDesign = ({
       {searchDetails.map((pokemon) => (
         <div
           key={pokemon.id}
-          className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+          className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl "
         >
           {/* Top gradient */}
           <div className="absolute left-0 right-0 top-0 h-36 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100" />
@@ -41,7 +41,10 @@ const CardDesign = ({
             </div>
             {/* Name */}
             <div className="mt-4 text-center">
-              <h2 className="text-2xl font-extrabold capitalize tracking-tight text-slate-800">
+              <h2
+                className="text-2xl font-extrabold capitalize tracking-tight text-slate-800 cursor-pointer"
+                onClick={() => onSetPokemonDetails(pokemon)}
+              >
                 {pokemon.name}
               </h2>
             </div>
@@ -96,16 +99,6 @@ const CardDesign = ({
                   </div>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={() => onSetPokemonDetails(pokemon)}
-                className="group mt-4 inline-flex items-center gap-2 rounded-full border border-blue-500 bg-blue-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-white hover:text-blue-500 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 active:scale-95 cursor-pointer"
-              >
-                Show More
-                <span className="transition-transform duration-200 group-hover:translate-x-1">
-                  →
-                </span>
-              </button>
             </div>
           </div>
         </div>

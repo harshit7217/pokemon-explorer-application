@@ -1,13 +1,23 @@
 const Button = ({ title, onClick, disabled }) => {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-3 my-4 mx-auto w-fit p-3 rounded-2xl bg-white/80">
+    <div className="flex flex-wrap items-center justify-center gap-3 w-fit m-0 p-0">
       <button
         onClick={onClick}
         disabled={disabled}
-        className="px-4 py-2 rounded-full border border-blue-500 bg-blue-500 text-white text-sm font-medium shadow-sm transition-all duration-200
-          hover:bg-white hover:text-blue-500 hover:shadow-md active:scale-95 cursor-pointer
-          disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:shadow-none
-          disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-400 disabled:hover:shadow-none disabled:active:scale-100"
+        className="
+      rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600
+      px-5 py-2.5 text-sm font-semibold text-white
+      shadow-md shadow-blue-500/20
+      transition-all duration-300 ease-out
+      hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30
+      active:translate-y-0 active:scale-95
+      focus-visible:outline-none focus-visible:ring-2
+      focus-visible:ring-blue-500 focus-visible:ring-offset-2
+      disabled:translate-y-0 disabled:scale-100
+      disabled:cursor-not-allowed disabled:bg-none
+      disabled:bg-gray-200 disabled:text-gray-400
+      disabled:shadow-none disabled:hover:shadow-none cursor-pointer
+    "
       >
         {title}
       </button>

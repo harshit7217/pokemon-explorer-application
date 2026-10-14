@@ -1,5 +1,4 @@
-import { useState } from "react";
-const FavoriteToggleButton = ({ pokemon, myFavorite, onSetMyFavorite }) => {
+const FavoriteToggleButton = ({ pokemon, onSetMyFavorite }) => {
   const isFavorite = !!localStorage.getItem(pokemon.id);
   return (
     <button
