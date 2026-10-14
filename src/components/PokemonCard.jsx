@@ -47,8 +47,11 @@ const SectionTitle = ({ children }) => (
   </h3>
 );
 
-export default function PokemonCard({ onSetMyFavorite, setPokemonCard }) {
-  const pokemon = useContext(PokemonCardContext).pokemonCard[0];
+export default function PokemonCard() {
+  const useContextData = useContext(PokemonCardContext);
+  const pokemon = useContextData.pokemonCard[0];
+  const setPokemonCard = useContextData.setPokemonCard;
+
   if (!pokemon) return null;
   const { name, id, sprites, types, height, weight, abilities, stats, moves } =
     pokemon;
@@ -74,10 +77,7 @@ export default function PokemonCard({ onSetMyFavorite, setPokemonCard }) {
         </span>
 
         <div className="absolute right-14 top-3 sm:right-16 sm:top-4">
-          <FavoriteToggleButton
-            pokemon={pokemon}
-            onSetMyFavorite={onSetMyFavorite}
-          />
+          <FavoriteToggleButton pokemon={pokemon} />
         </div>
 
         <div className="mt-3 rounded-full bg-white/90 p-2.5 shadow-lg ring-4 ring-white/40 sm:p-3">

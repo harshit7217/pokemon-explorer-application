@@ -252,7 +252,7 @@ function App() {
     });
 
     const searchItems =
-      filterItems.length !== 0
+      filterItems.length === 0
         ? items.filter((item) => {
             return item.name.includes(searchTerm);
           })
@@ -286,6 +286,15 @@ function App() {
     }
   };
 
+  const totalPage =
+    isFilter !== ""
+      ? searchTerm !== ""
+        ? Math.ceil(searchList().length / totalElementsPerPage)
+        : Math.ceil(typeFilterData.length / totalElementsPerPage)
+      : searchTerm === ""
+        ? Math.ceil(mainList.length / totalElementsPerPage)
+        : Math.ceil(searchList().length / totalElementsPerPage);
+
   const onHandleBasicStructure = () => {
     setSearchTerm("");
     setIsFilter("");
@@ -299,6 +308,7 @@ function App() {
   useEffect(() => {
     if (isFilter === "") {
       onHandlePageAndSearch();
+      onHandleLocalStorage();
     }
     if (isFilter !== "") {
       fetchingTypeFilterData();
@@ -395,14 +405,15 @@ function App() {
                 isFilter: isFilter,
                 typeFilterData: typeFilterData,
                 myFavorite: myFavorite,
+                onSetPokemonDetails: onSetPokemonDetails,
+                onSetMyFavorite: onSetMyFavorite,
+                setPokemonCard: setPokemonCard,
+                totalPage: totalPage,
+                onHandlePage: onHandlePageAndSearch,
               }}
             >
               <PokemonListing
                 fetchPokemonList={fetchPokemonList}
-                onHandlePageAndSearch={onHandlePageAndSearch}
-                onSetPokemonDetails={onSetPokemonDetails}
-                setPokemonCard={setPokemonCard}
-                onSetMyFavorite={onSetMyFavorite}
                 onHandleBasicStructure={onHandleBasicStructure}
               />
             </PokemonCardContext>
@@ -416,14 +427,12 @@ function App() {
                 pokemonCard: pokemonCard,
                 myFavorite: myFavorite,
                 localData: localData,
+                onSetPokemonDetails: onSetPokemonDetails,
+                setPokemonCard: setPokemonCard,
+                onSetMyFavorite: onSetMyFavorite,
               }}
             >
-              <MyFavorite
-                onSetPokemonDetails={onSetPokemonDetails}
-                setPokemonCard={setPokemonCard}
-                onSetMyFavorite={onSetMyFavorite}
-                onHandleBasicStructure={onHandleBasicStructure}
-              />
+              <MyFavorite onHandleBasicStructure={onHandleBasicStructure} />
             </PokemonCardContext>
           }
         />

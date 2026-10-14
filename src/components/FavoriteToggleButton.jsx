@@ -1,4 +1,9 @@
-const FavoriteToggleButton = ({ pokemon, onSetMyFavorite }) => {
+import { useContext } from "react";
+import { PokemonCardContext } from "./context/PokemonCardContext";
+
+const FavoriteToggleButton = ({ pokemon }) => {
+  const useContextData = useContext(PokemonCardContext);
+  const onSetMyFavorite = useContextData.onSetMyFavorite;
   const isFavorite = !!localStorage.getItem(pokemon.id);
   return (
     <button

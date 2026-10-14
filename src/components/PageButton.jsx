@@ -1,4 +1,8 @@
-const PageButton = ({ i, isActive, onHandlePage, page }) => {
+import { useContext } from "react";
+import { PokemonCardContext } from "./context/PokemonCardContext";
+
+const PageButton = ({ i, isActive, page }) => {
+  const onHandlePage = useContext(PokemonCardContext).onHandlePage;
   return (
     <button
       className={`h-9 min-w-9 cursor-pointer rounded-lg px-2 text-sm font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95 ${

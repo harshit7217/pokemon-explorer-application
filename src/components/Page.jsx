@@ -2,23 +2,15 @@ import { useContext } from "react";
 import PageButton from "./PageButton";
 import { PokemonCardContext } from "./context/PokemonCardContext";
 
-const Page = ({ totalPage, onHandlePage }) => {
+const Page = () => {
   const useContextData = useContext(PokemonCardContext);
   const currentPage = useContextData.currentPage;
-  // console.log(currentPage);
+  const totalPage = useContextData.totalPage;
 
   const array = Array.from({ length: totalPage }, (_, i) => {
     const page = i + 1;
     const isActive = page === currentPage;
-    return (
-      <PageButton
-        key={i}
-        i={i}
-        isActive={isActive}
-        onHandlePage={onHandlePage}
-        page={page}
-      />
-    );
+    return <PageButton key={i} i={i} isActive={isActive} page={page} />;
   });
 
   const pageNumber = array.slice(
@@ -29,7 +21,7 @@ const Page = ({ totalPage, onHandlePage }) => {
     <div className="flex">
       {currentPage !== 1 ? (
         <div>
-          <PageButton i={1 - 1} onHandlePage={onHandlePage} page={1} />
+          <PageButton i={1 - 1} page={1} />
           <span>.....</span>
         </div>
       ) : null}
@@ -37,11 +29,7 @@ const Page = ({ totalPage, onHandlePage }) => {
       {currentPage !== totalPage ? (
         <div>
           <span>.....</span>
-          <PageButton
-            i={totalPage - 1}
-            onHandlePage={onHandlePage}
-            page={totalPage}
-          />
+          <PageButton i={totalPage - 1} page={totalPage} />
         </div>
       ) : null}
     </div>
