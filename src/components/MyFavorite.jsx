@@ -8,50 +8,11 @@ const MyFavorite = ({
   onSetPokemonDetails,
   pokemonCard,
   setPokemonCard,
-  typeFilterData,
-  isFilter,
-  searchTerm,
   myFavorite,
   onSetMyFavorite,
-  sort,
   onHandleBasicStructure,
+  localData,
 }) => {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const t = Object.keys(localStorage).sort((a, b) =>
-      sort !== "ascending" ? b - a : a - b,
-    );
-    const items = t.map((val) => {
-      const store = localStorage.getItem(val);
-      return JSON.parse(store);
-    });
-
-    const filterItems = items.filter((item) => {
-      return typeFilterData.some((type) =>
-        item.name.includes(type.pokemon.name),
-      );
-    });
-
-    const searchItems =
-      filterItems.length === 0
-        ? items.filter((item) => {
-            return item.name.includes(searchTerm);
-          })
-        : filterItems.filter((item) => {
-            return item.name.includes(searchTerm);
-          });
-
-    const temp =
-      isFilter !== ""
-        ? searchTerm !== ""
-          ? searchItems
-          : filterItems
-        : searchTerm !== ""
-          ? searchItems
-          : items;
-    setData(temp);
-  }, [myFavorite, sort, typeFilterData, searchTerm]);
-
   useEffect(() => {
     onHandleBasicStructure();
   }, []);
@@ -66,11 +27,11 @@ const MyFavorite = ({
             onSetPokemonDetails={onSetPokemonDetails}
           />
         </div>
-      ) : data.length === 0 ? (
+      ) : localData.length === 0 ? (
         <NotFound />
       ) : (
         <CardDesign
-          searchDetails={data}
+          searchDetails={localData}
           onSetPokemonDetails={onSetPokemonDetails}
           myFavorite={myFavorite}
           onSetMyFavorite={onSetMyFavorite}

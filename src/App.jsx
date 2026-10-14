@@ -23,6 +23,7 @@ function App() {
   const [myFavorite, setMyFavorite] = useState([]);
   const [sortByName, setSortByName] = useState("");
   const [sortByBaseStats, setSortByBaseStats] = useState("");
+  const [localData, setLocalData] = useState([]);
 
   const fetchPokemonList = async () => {
     setIsLoading(true);
@@ -138,6 +139,8 @@ function App() {
     setIsFilter("");
     setTotalElementsPerPage(20);
     setSortByBaseStats("");
+    setSortByName("");
+    setSortById("");
   };
 
   const pokemonDataList = (page) => {
@@ -204,6 +207,8 @@ function App() {
 
   const onHandleSortById = (event) => {
     setSortById(event.target.value);
+    setSortByName("");
+    setSortByBaseStats("");
     if (event.target.value === "ascending") {
       setMainList(
         mainList.sort(
@@ -226,6 +231,8 @@ function App() {
   };
 
   const onHandleOrderByName = (event) => {
+    setSortByBaseStats("");
+    setSortById("");
     setSortByName(event.target.value);
     if (event.target.value === "a-z") {
       setMainList(mainList.sort((a, b) => a.name.localeCompare(b.name)));
@@ -242,10 +249,14 @@ function App() {
 
   const onHandleSortByBaseStats = (event) => {
     setSortByBaseStats(event.target.value);
+    setSortByName("");
+    setSortById("");
     if (event.target.value === "min") {
       setDataList(dataList.sort((a, b) => a.base_stats - b.base_stats));
+      setLocalData(localData.sort((a, b) => a.base_stats - b.base_stats));
     } else {
       setDataList(dataList.sort((a, b) => b.base_stats - a.base_stats));
+      setLocalData(localData.sort((a, b) => b.base_stats - a.base_stats));
     }
   };
 
@@ -256,6 +267,57 @@ function App() {
       setMyFavorite({ ...myFavorite, status: false });
     }
   };
+
+  const onHandleLocalStorage = () => {
+    const localStorageKey = Object.keys(localStorage);
+    const items = localStorageKey.map((val) => {
+      const store = localStorage.getItem(val);
+      return JSON.parse(store);
+    });
+
+    const filterItems = items.filter((item) => {
+      return typeFilterData.some((type) =>
+        item.name.includes(type.pokemon.name),
+      );
+    });
+
+    const searchItems =
+      filterItems.length === 0
+        ? items.filter((item) => {
+            return item.name.includes(searchTerm);
+          })
+        : filterItems.filter((item) => {
+            return item.name.includes(searchTerm);
+          });
+
+    const temp =
+      isFilter !== ""
+        ? searchTerm !== ""
+          ? searchItems
+          : filterItems
+        : searchTerm !== ""
+          ? searchItems
+          : items;
+    onHandleLocalStorageSort(temp);
+  };
+
+  const onHandleLocalStorageSort = (temp) => {
+    if (sortById === "ascending") {
+      setLocalData(temp.sort((a, b) => a.id - b.id));
+    } else if (sortById === "descending") {
+      setLocalData(temp.sort((a, b) => b.id - a.id));
+    } else if (sortByName === "a-z") {
+      setLocalData(temp.sort((a, b) => a.name.localeCompare(b.name)));
+    } else if (sortByName === "z-a") {
+      setLocalData(temp.sort((a, b) => b.name.localeCompare(a.name)));
+    } else {
+      setLocalData(temp);
+    }
+  };
+
+  useEffect(() => {
+    onHandleLocalStorage();
+  }, [myFavorite, searchTerm, typeFilterData]);
 
   return (
     <BrowserRouter>
@@ -340,17 +402,13 @@ function App() {
           path="/my-favorite"
           element={
             <MyFavorite
-              dataList={dataList}
               onSetPokemonDetails={onSetPokemonDetails}
               pokemonCard={pokemonCard}
               setPokemonCard={setPokemonCard}
-              typeFilterData={typeFilterData}
-              isFilter={isFilter}
-              searchTerm={searchTerm}
-              sort={sortById}
               myFavorite={myFavorite}
               onSetMyFavorite={onSetMyFavorite}
               onHandleBasicStructure={onHandleBasicStructure}
+              localData={localData}
             />
           }
         />
