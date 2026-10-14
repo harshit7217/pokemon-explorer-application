@@ -82,10 +82,10 @@ const CardDesign = ({
                     </div>
                     <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${stat.base_stat >= 100 ? "bg-[#98ed99]" : stat.base_stat >= 60 ? "bg-[#f7f52f]" : "bg-[#ed837b]"}`}
+                        className={`h-full rounded-full transition-all duration-500 ${stat.base_stat >= 120 ? "bg-[#98ed99]" : stat.base_stat >= 80 ? "bg-[#f7f52f]" : "bg-[#ed837b]"}`}
                         style={{
                           width: `${Math.min(
-                            (stat.base_stat / 150) * 100,
+                            (stat.base_stat / 200) * 100,
                             100,
                           )}%`,
                         }}
