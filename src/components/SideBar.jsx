@@ -36,29 +36,64 @@ const HeartIcon = () => (
 
 const links = [
   { to: "/", label: "Home", icon: <HomeIcon />, end: true },
-  { to: "/my-favorite", label: "MyFavorite", icon: <HeartIcon /> },
+  { to: "/my-favorite", label: "My Favorite", icon: <HeartIcon /> },
 ];
 
 export default function Sidebar() {
   return (
-    <div className={`sidebar-spacer`}>
-      <aside className={`sidebar `}>
-        <nav className="sidebar__nav">
+    <>
+      {/* Desktop & tablet sidebar */}
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-16 border-r border-gray-200 bg-white shadow-sm sm:block lg:w-[70px]">
+        <nav className="flex flex-col items-center gap-3 px-2 py-6">
           {links.map(({ to, label, icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
               title={label}
+              aria-label={label}
               className={({ isActive }) =>
-                `sidebar__link ${isActive ? "sidebar__link--active" : ""}`
+                `flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-200 ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
+                    : "text-gray-500 hover:bg-gray-100 hover:text-blue-600"
+                }`
               }
             >
-              <span className="sidebar__icon">{icon}</span>
+              {icon}
             </NavLink>
           ))}
         </nav>
       </aside>
-    </div>
+
+      {/* Mobile bottom navigation */}
+      <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-gray-200 bg-white/95 px-4 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_-4px_15px_rgba(0,0,0,0.05)] backdrop-blur-md sm:hidden">
+        {links.map(({ to, label, icon, end }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={end}
+            className={({ isActive }) =>
+              `flex min-w-20 flex-col items-center justify-center gap-1 rounded-xl px-4 py-2 text-xs font-medium transition-colors ${
+                isActive ? "text-blue-600" : "text-gray-500 hover:text-blue-600"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <span
+                  className={`flex h-8 w-12 items-center justify-center rounded-xl transition-colors ${
+                    isActive ? "bg-blue-50" : ""
+                  }`}
+                >
+                  {icon}
+                </span>
+                <span>{label}</span>
+              </>
+            )}
+          </NavLink>
+        ))}
+      </nav>
+    </>
   );
 }

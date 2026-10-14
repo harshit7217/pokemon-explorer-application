@@ -1,18 +1,25 @@
 const TypeFilter = ({ isFilter, setIsFilter, typeFilterList }) => {
   return (
-    <div className="w-full px-4 sm:pl-[70px] sm:pr-6">
-      <div className="relative w-full sm:w-56">
+    <div className="w-full px-3 sm:px-6 lg:pl-[70px] lg:pr-6">
+      <div className="relative w-full sm:w-56 md:w-60 lg:w-64">
         <select
           name="type"
           id="type"
           value={isFilter}
           onChange={(e) => setIsFilter(e.target.value)}
-          className="w-full cursor-pointer appearance-none truncate rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-10 text-sm text-gray-900 shadow-sm transition hover:border-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+          className="w-full cursor-pointer appearance-none truncate rounded-lg border border-gray-300 bg-white py-2.5 pl-3 pr-10 text-sm text-gray-900 shadow-sm transition hover:border-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 sm:py-3 sm:text-sm"
         >
-          <option value="">no filter</option>
+          <option value="" className="bg-white text-sm text-slate-700">
+            No Filter
+          </option>
+
           {typeFilterList.map((filter) => (
-            <option key={filter.name} value={filter.url}>
-              {filter.name}
+            <option
+              key={filter.name}
+              value={filter.url}
+              className="bg-white text-sm text-slate-700"
+            >
+              {filter.name.charAt(0).toUpperCase() + filter.name.slice(1)}
             </option>
           ))}
         </select>

@@ -9,7 +9,8 @@ import Sorting from "./components/Sorting.jsx";
 import { useDebouncedCallback } from "use-debounce";
 
 function App() {
-  const totalElementsPerPage = 20;
+  const totalElementsPerPage = 12;
+
   const [mainList, setMainList] = useState([]);
   const [dataList, setDataList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -113,37 +114,6 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (isFilter === "") {
-      onHandlePageAndSearch();
-    }
-    if (isFilter !== "") {
-      fetchingTypeFilterData();
-    }
-    setSortById("");
-    setSortByName("");
-    setSortByBaseStats("");
-  }, [isFilter]);
-
-  useEffect(() => {
-    onHandlePageAndSearch();
-  }, [typeFilterData]);
-
-  useEffect(() => {
-    fetchingTypeFilterList();
-    onHandlePageAndSearch();
-  }, [mainList]);
-
-  const onHandleBasicStructure = () => {
-    setSearchTerm("");
-    setIsFilter("");
-    setSortByBaseStats("");
-    setSortByName("");
-    setSortById("");
-    setPokemonCard([]);
-    setCurrentPage(1);
-  };
-
   const pokemonDataList = (page) => {
     return mainList.slice(
       (page - 1) * totalElementsPerPage,
@@ -158,6 +128,16 @@ function App() {
       (page - 1) * totalElementsPerPage,
       page * totalElementsPerPage,
     );
+  };
+
+  const searchList = () => {
+    const searchIncludingElements =
+      isFilter !== ""
+        ? typeFilterData.filter((val) =>
+            val.pokemon.name.includes(searchTerm.toLowerCase()),
+          )
+        : mainList.filter((val) => val.name.includes(searchTerm.toLowerCase()));
+    return searchIncludingElements;
   };
 
   const pokemonTypeFilterList = (page) => {
@@ -191,16 +171,6 @@ function App() {
   };
 
   const search = useDebouncedCallback(onHandlePageAndSearch, 200);
-
-  const searchList = () => {
-    const searchIncludingElements =
-      isFilter !== ""
-        ? typeFilterData.filter((val) =>
-            val.pokemon.name.includes(searchTerm.toLowerCase()),
-          )
-        : mainList.filter((val) => val.name.includes(searchTerm.toLowerCase()));
-    return searchIncludingElements;
-  };
 
   const onSetPokemonDetails = (data) => {
     setPokemonCard([data]);
@@ -262,11 +232,9 @@ function App() {
   };
 
   const onSetMyFavorite = (id, check) => {
-    if (check) {
-      setMyFavorite({ id: id, status: true });
-    } else {
-      setMyFavorite({ ...myFavorite, status: false });
-    }
+    check
+      ? setMyFavorite({ id: id, status: true })
+      : setMyFavorite({ ...myFavorite, status: false });
   };
 
   const onHandleLocalStorage = () => {
@@ -316,6 +284,37 @@ function App() {
       return temp;
     }
   };
+
+  const onHandleBasicStructure = () => {
+    setSearchTerm("");
+    setIsFilter("");
+    setSortByBaseStats("");
+    setSortByName("");
+    setSortById("");
+    setPokemonCard([]);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    if (isFilter === "") {
+      onHandlePageAndSearch();
+    }
+    if (isFilter !== "") {
+      fetchingTypeFilterData();
+    }
+    setSortById("");
+    setSortByName("");
+    setSortByBaseStats("");
+  }, [isFilter]);
+
+  useEffect(() => {
+    onHandlePageAndSearch();
+  }, [typeFilterData]);
+
+  useEffect(() => {
+    fetchingTypeFilterList();
+    onHandlePageAndSearch();
+  }, [mainList]);
 
   useEffect(() => {
     onHandleLocalStorage();
