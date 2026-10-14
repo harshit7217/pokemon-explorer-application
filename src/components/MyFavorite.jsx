@@ -1,5 +1,4 @@
 import CardDesign from "./CardDesign";
-import Button from "./Button";
 import PokemonCard from "./PokemonCard";
 import { useEffect } from "react";
 import NotFound from "./NotFound";
@@ -21,10 +20,10 @@ const MyFavorite = ({
     <div className="pl-[70px]">
       {pokemonCard?.length === 1 ? (
         <div>
-          <Button title={"Back"} onClick={() => setPokemonCard([])} />
           <PokemonCard
             pokemon={pokemonCard[0]}
-            onSetPokemonDetails={onSetPokemonDetails}
+            onSetMyFavorite={onSetMyFavorite}
+            setPokemonCard={setPokemonCard}
           />
         </div>
       ) : localData.length === 0 ? (

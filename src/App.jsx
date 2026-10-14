@@ -140,6 +140,7 @@ function App() {
     setSortByBaseStats("");
     setSortByName("");
     setSortById("");
+    setPokemonCard([]);
   };
 
   const pokemonDataList = (page) => {
