@@ -169,7 +169,13 @@ function App() {
     setCurrentPage(page);
     const arr = findingCurrentElements(page, status);
     const temp = await fetchPokemonDetails(arr);
-    setDataList(temp);
+    if (sortByBaseStats === "min") {
+      setDataList(temp.sort((a, b) => a.base_stats - b.base_stats));
+    } else if (sortByBaseStats === "max") {
+      setDataList(temp.sort((a, b) => b.base_stats - a.base_stats));
+    } else {
+      setDataList(temp);
+    }
   };
 
   const search = useDebouncedCallback(onHandlePageAndSearch, 200);
