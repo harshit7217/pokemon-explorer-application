@@ -7,7 +7,6 @@ import { PokemonCardContext } from "./context/PokemonCardContext.jsx";
 
 const PokemonListing = ({ fetchPokemonList, onHandleBasicStructure }) => {
   const useContextData = useContext(PokemonCardContext);
-  const pokemonCard = useContextData.pokemonCard;
   const searchTerm = useContextData.searchTerm;
   const dataList = useContextData.dataList;
   const isLoading = useContextData.isLoading;
@@ -21,10 +20,6 @@ const PokemonListing = ({ fetchPokemonList, onHandleBasicStructure }) => {
     <div className="min-h-screen w-full min-w-0 font-serif sm:pl-16 lg:pl-[70px]">
       {searchTerm !== "" && dataList.length === 0 ? (
         <NotFound />
-      ) : pokemonCard.length === 1 ? (
-        <div className="relative z-[1] w-full px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
-          <PokemonCard />
-        </div>
       ) : (
         <div className="w-full min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-8">
           {Array.isArray(dataList) && dataList.length > 0 && (

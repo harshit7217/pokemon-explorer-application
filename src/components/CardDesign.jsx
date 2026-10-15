@@ -1,10 +1,18 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import FavoriteToggleButton from "./FavoriteToggleButton";
 import { PokemonCardContext } from "./context/PokemonCardContext";
+import Modal from "react-modal";
+import PokemonCard from "./PokemonCard";
+
+Modal.setAppElement("#root");
 
 const CardDesign = ({ searchDetails }) => {
   const useContextData = useContext(PokemonCardContext);
   const onSetPokemonDetails = useContextData.onSetPokemonDetails;
+  const modalIsOpen = useContextData.modalIsOpen;
+  const closeModal = useContextData.closeModal;
+  const openModal = useContextData.openModal;
+
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {searchDetails.map((pokemon) => (
@@ -36,10 +44,16 @@ const CardDesign = ({ searchDetails }) => {
             <div className="mt-4 text-center">
               <h2
                 className="text-2xl font-extrabold capitalize tracking-tight text-slate-800 cursor-pointer"
-                onClick={() => onSetPokemonDetails(pokemon)}
+                onClick={() => {
+                  onSetPokemonDetails(pokemon);
+                  openModal();
+                }}
               >
                 {pokemon.name}
               </h2>
+              <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+                <PokemonCard />
+              </Modal>
             </div>
             {/* Types */}
             <div className="mt-3 flex flex-wrap justify-center gap-2">

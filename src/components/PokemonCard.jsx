@@ -51,6 +51,7 @@ export default function PokemonCard() {
   const useContextData = useContext(PokemonCardContext);
   const pokemon = useContextData.pokemonCard[0];
   const setPokemonCard = useContextData.setPokemonCard;
+  const closeModal = useContextData.closeModal;
 
   if (!pokemon) return null;
   const { name, id, sprites, types, height, weight, abilities, stats, moves } =
@@ -71,7 +72,10 @@ export default function PokemonCard() {
         <span className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
           <Button
             title="×"
-            onClick={() => setPokemonCard([])}
+            onClick={() => {
+              setPokemonCard([]);
+              closeModal();
+            }}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all duration-200 hover:rotate-90 hover:border-red-200 hover:bg-red-50 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-300 sm:h-9 sm:w-9"
           />
         </span>
