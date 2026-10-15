@@ -62,9 +62,9 @@ export default function PokemonCard() {
   const weightKg = (weight / 10).toFixed(1);
 
   return (
-    <article className="mx-2 flex w-full max-w-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-slate-200 sm:mx-auto sm:rounded-3xl md:flex-row lg:max-w-6xl">
+    <article className="mx-auto flex h-[100dvh] w-[70vw] max-w-full flex-col overflow-hidden bg-white shadow-xl ring-1 ring-slate-200 md:h-[90dvh] md:flex-row md:rounded-3xl">
       {/* LEFT: Image Panel */}
-      <aside className="relative flex w-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 px-4 py-10 text-white sm:gap-5 sm:px-6 sm:py-12 md:w-2/5 md:shrink-0 md:py-10">
+      <aside className="relative flex w-full shrink-0 flex-col items-center justify-center gap-2 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 px-4 py-3 text-white md:w-[35%] md:gap-3 md:py-4">
         <span className="absolute left-4 top-4 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur sm:left-5 sm:top-5 sm:text-sm">
           #{String(id).padStart(3, "0")}
         </span>
@@ -84,7 +84,7 @@ export default function PokemonCard() {
           <img
             src={sprites.front_default}
             alt={name}
-            className="h-36 w-36 object-contain [image-rendering:pixelated] sm:h-48 sm:w-48 md:h-44 md:w-44 lg:h-56 lg:w-56"
+            className="h-24 w-24 object-contain [image-rendering:pixelated] sm:h-32 sm:w-32 md:h-40 md:w-40 lg:h-48 lg:w-48"
           />
         </div>
 
@@ -93,7 +93,7 @@ export default function PokemonCard() {
             {name}
           </h2>
 
-          <ul className="mt-3 flex flex-wrap justify-center gap-2 px-2">
+          <ul className="mt-2 flex flex-wrap justify-center gap-1.5 px-1">
             {types.map(({ type }) => (
               <li
                 key={type.name}
@@ -111,7 +111,7 @@ export default function PokemonCard() {
       </aside>
 
       {/* RIGHT: Content */}
-      <div className="min-w-0 flex-1 space-y-6 p-4 sm:space-y-8 sm:p-6 md:p-6 lg:p-8">
+      <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-hidden p-3 sm:space-y-4 sm:p-5 md:p-6">
         {/* Height / Weight */}
         <section className="grid grid-cols-2 gap-3 text-center sm:gap-4">
           <div className="rounded-xl bg-slate-50 px-2 py-3 sm:rounded-2xl sm:py-4">
@@ -136,7 +136,7 @@ export default function PokemonCard() {
         {/* Abilities */}
         <section className="min-w-0">
           <SectionTitle>Abilities</SectionTitle>
-          <ul className="mt-3 flex flex-wrap gap-2">
+          <ul className="mt-2 flex flex-wrap gap-1.5">
             {abilities.map(({ ability, is_hidden }) => (
               <li
                 key={ability.name}
@@ -154,7 +154,7 @@ export default function PokemonCard() {
         {/* Base Stats */}
         <section className="min-w-0">
           <SectionTitle>Base stats</SectionTitle>
-          <ul className="mt-3 space-y-3">
+          <ul className="mt-2 space-y-2">
             {stats.map(({ stat, base_stat }) => (
               <li
                 key={stat.name}
@@ -190,7 +190,7 @@ export default function PokemonCard() {
         {/* Moves */}
         <section className="min-w-0">
           <SectionTitle>Moves ({moves.length})</SectionTitle>
-          <ul className="mt-3 flex max-h-40 flex-wrap gap-1.5 overflow-y-auto overscroll-contain rounded-xl bg-slate-50 p-2.5 sm:rounded-2xl sm:p-3">
+          <ul className="mt-2 flex max-h-40 flex-wrap gap-1.5 overflow-y-auto overscroll-contain rounded-xl bg-slate-50 p-2.5 sm:rounded-2xl sm:p-3">
             {moves.map(({ move }) => (
               <li
                 key={move.name}

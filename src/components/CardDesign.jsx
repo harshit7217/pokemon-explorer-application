@@ -2,7 +2,7 @@ import { useContext } from "react";
 import FavoriteToggleButton from "./FavoriteToggleButton";
 import { PokemonCardContext } from "./context/PokemonCardContext";
 import Modal from "react-modal";
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "./PokemonCard.jsx";
 
 Modal.setAppElement("#root");
 
@@ -51,9 +51,6 @@ const CardDesign = ({ searchDetails }) => {
               >
                 {pokemon.name}
               </h2>
-              <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-                <PokemonCard />
-              </Modal>
             </div>
             {/* Types */}
             <div className="mt-3 flex flex-wrap justify-center gap-2">
@@ -110,6 +107,29 @@ const CardDesign = ({ searchDetails }) => {
           </div>
         </div>
       ))}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={{
+          content: {
+            width: "70vw",
+            maxWidth: "70vw",
+            height: "90vh",
+            inset: "50% auto auto 50%",
+            transform: "translate(-50%, -50%)",
+            padding: 0,
+            border: "none",
+            borderRadius: "16px",
+            overflow: "auto",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            zIndex: 1000,
+          },
+        }}
+      >
+        <PokemonCard />
+      </Modal>
     </div>
   );
 };
