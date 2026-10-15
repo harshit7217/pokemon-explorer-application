@@ -14,7 +14,8 @@ const FavoriteToggleButton = ({ pokemon }) => {
           ? "border-red-300 bg-red-50"
           : "border-gray-200 bg-white opacity-80 hover:border-red-200 hover:opacity-100"
       }`}
-      onClick={() => {
+      onClick={(event) => {
+        event.stopPropagation();
         if (localStorage.getItem(pokemon.id)) {
           onSetMyFavorite(pokemon.id, false);
           localStorage.removeItem(pokemon.id);

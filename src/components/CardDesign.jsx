@@ -18,7 +18,11 @@ const CardDesign = ({ searchDetails }) => {
       {searchDetails.map((pokemon) => (
         <div
           key={pokemon.id}
-          className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl "
+          className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer"
+          onClick={() => {
+            onSetPokemonDetails(pokemon);
+            openModal();
+          }}
         >
           {/* Top gradient */}
           <div className="absolute left-0 right-0 top-0 h-36 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100" />
@@ -42,13 +46,7 @@ const CardDesign = ({ searchDetails }) => {
             </div>
             {/* Name */}
             <div className="mt-4 text-center">
-              <h2
-                className="text-2xl font-extrabold capitalize tracking-tight text-slate-800 cursor-pointer"
-                onClick={() => {
-                  onSetPokemonDetails(pokemon);
-                  openModal();
-                }}
-              >
+              <h2 className="text-2xl font-extrabold capitalize tracking-tight text-slate-800">
                 {pokemon.name}
               </h2>
             </div>
@@ -107,6 +105,8 @@ const CardDesign = ({ searchDetails }) => {
           </div>
         </div>
       ))}
+
+      {/* Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -123,7 +123,7 @@ const CardDesign = ({ searchDetails }) => {
             overflow: "auto",
           },
           overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
             zIndex: 1000,
           },
         }}
