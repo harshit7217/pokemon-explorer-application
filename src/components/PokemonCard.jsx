@@ -80,10 +80,6 @@ export default function PokemonCard() {
           />
         </span>
 
-        <div className="absolute right-14 top-3 sm:right-16 sm:top-4">
-          <FavoriteToggleButton pokemon={pokemon} />
-        </div>
-
         <div className="mt-3 rounded-full bg-white/90 p-2.5 shadow-lg ring-4 ring-white/40 sm:p-3">
           <img
             src={sprites.front_default}
@@ -110,6 +106,8 @@ export default function PokemonCard() {
             ))}
           </ul>
         </div>
+
+        <FavoriteToggleButton pokemon={pokemon} />
       </aside>
 
       {/* RIGHT: Content */}

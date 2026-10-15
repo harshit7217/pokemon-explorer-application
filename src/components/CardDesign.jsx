@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import FavoriteToggleButton from "./FavoriteToggleButton";
 import { PokemonCardContext } from "./context/PokemonCardContext";
 import Modal from "react-modal";

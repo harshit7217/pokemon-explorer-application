@@ -304,6 +304,7 @@ function App() {
     setSortById("");
     setPokemonCard([]);
     setCurrentPage(1);
+    setModalIsOpen(false);
   };
 
   // Handling Modal

@@ -1,5 +1,4 @@
 import CardDesign from "./CardDesign";
-import PokemonCard from "./PokemonCard";
 import { useContext, useEffect } from "react";
 import NotFound from "./NotFound";
 import { PokemonCardContext } from "./context/PokemonCardContext";

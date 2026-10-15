@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import NotFound from "./NotFound.jsx";
 import CardDesign from "./CardDesign.jsx";
 import Paging from "./Paging.jsx";
-import PokemonCard from "./PokemonCard.jsx";
 import { PokemonCardContext } from "./context/PokemonCardContext.jsx";
 
 const PokemonListing = ({ fetchPokemonList, onHandleBasicStructure }) => {
