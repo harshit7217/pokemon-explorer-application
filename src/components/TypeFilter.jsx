@@ -1,4 +1,12 @@
-const TypeFilter = ({ isFilter, setIsFilter, typeFilterList }) => {
+import { useContext } from "react";
+import { PokemonCardContext } from "./context/PokemonCardContext";
+
+const TypeFilter = () => {
+  const useContextData = useContext(PokemonCardContext);
+  const isFilter = useContextData.isFilter;
+  const setIsFilter = useContextData.setIsFilter;
+  const typeFilterList = useContextData.typeFilterList;
+
   return (
     <div className="w-full px-3 sm:px-6 lg:pl-[70px] lg:pr-6">
       <div className="relative w-full sm:w-56 md:w-60 lg:w-64">

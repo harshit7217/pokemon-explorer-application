@@ -1,9 +1,13 @@
-const SearchPokemon = ({
-  searchTerm,
-  setSearchTerm,
-  onClickSearch,
-  search,
-}) => {
+import { useContext } from "react";
+import { PokemonCardContext } from "./context/PokemonCardContext";
+
+const SearchPokemon = () => {
+  const useContextData = useContext(PokemonCardContext);
+  const searchTerm = useContextData.searchTerm;
+  const setSearchTerm = useContextData.setSearchTerm;
+  const onClickSearch = useContextData.onHandlePage;
+  const search = useContextData.search;
+
   return (
     <div className="w-full">
       <div className="border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-md sm:pl-16 lg:pl-[70px]">
